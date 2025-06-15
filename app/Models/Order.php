@@ -28,7 +28,7 @@ class Order extends Model
      */
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
