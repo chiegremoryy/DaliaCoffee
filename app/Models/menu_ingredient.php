@@ -20,6 +20,6 @@ class menu_ingredient extends Model
     }
     public function ingredient()
     {
-        return $this->belongsTo(ingredients::class);
+        return $this->belongsTo(ingredients::class, 'ingredient_id');
     }
 }

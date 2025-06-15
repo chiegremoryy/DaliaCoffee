@@ -19,6 +19,7 @@ return new class extends Migration
             // Foreign Key ke tabel 'users' (kasir yang melayani)
             $table->foreignId('cashier_id')->constrained('users')->onDelete('cascade');
             $table->date('order_date');
+            $table->timestamps();
         });
     }
 
