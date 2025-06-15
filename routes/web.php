@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\IngredientController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -34,6 +36,19 @@ Route::post('/karyawan', [AdminDashboardController::class, 'store'])->name('kary
 Route::get('/karyawan/{id}/edit', [AdminDashboardController::class, 'edit'])->name('karyawan.edit');
 Route::put('/karyawan/{id}', [AdminDashboardController::class, 'update'])->name('karyawan.update');
 Route::delete('/karyawan/{id}', [AdminDashboardController::class, 'destroy'])->name('karyawan.destroy');
+
+// Route Stock
+Route::get('/ingredients', [IngredientController::class, 'index'])->name('ingredients.index');
+Route::get('/ingredients/create', [IngredientController::class, 'create'])->name('ingredients.create');
+Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
+// Route Stock
+Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+Route::get('/stocks/create', [StockController::class, 'create'])->name('stocks.create');
+Route::post('/stocks', [StockController::class, 'store'])->name('stocks.store');
+Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('stocks.destroy');
+
+Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+Route::get('/ingredients', [IngredientController::class, 'index'])->name('ingredients.index');
 
 // Contoh: halaman dashboard setelah login
 Route::get('/', function () {

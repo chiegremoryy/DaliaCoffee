@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('ingredients')
                 ->onDelete('cascade'); // Foreign Key ke tabel 'ingredients'
             $table->enum('type', ['in', 'out']); // Tipe perubahan stok, 'in' untuk penambahan, 'out' untuk pengurangan
-            $table->decimal('quantity', 10, 2); // Jumlah perubahan stok, bisa berupa angka desimal
+            $table->bigInteger('quantity'); // Jumlah perubahan stok
             $table->string('description')->nullable(); // Deskripsi perubahan stok, bisa kosong
             $table->timestamps();
         });

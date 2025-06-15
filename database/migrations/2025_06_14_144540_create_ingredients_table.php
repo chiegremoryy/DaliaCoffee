@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('unit'); // Satuan bahan, misalnya 'kg', 'liter', 'pcs'
-            $table->decimal('stock', 10, 2)->default(0); // Stok bahan, bisa berupa angka desimal
+            $table->bigInteger('stock')->default(0); // Stok bahan
             $table->timestamps();
         });
     }
