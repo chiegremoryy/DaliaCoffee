@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -49,6 +50,17 @@ Route::delete('/stocks/{stock}', [StockController::class, 'destroy'])->name('sto
 
 Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
 Route::get('/ingredients', [IngredientController::class, 'index'])->name('ingredients.index');
+
+// Route untuk Order
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/print/{order}', [OrderController::class, 'print'])->name('orders.print');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+
+// Route Laporan Order
+Route::get('/laporan', [OrderController::class, 'report'])->name('orders.report');
+Route::get('/laporan/export/pdf', [OrderController::class, 'exportPDF'])->name('orders.export.pdf');
 
 // Contoh: halaman dashboard setelah login
 Route::get('/', function () {

@@ -40,4 +40,10 @@ class Menu extends Model
     {
         return $this->hasMany(menu_ingredient::class);
     }
+
+    public function ingredients()
+    {
+        return $this->belongsToMany(ingredients::class, 'menu_ingredient')
+            ->withPivot('quantity');
+    }
 }
