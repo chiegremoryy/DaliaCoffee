@@ -11,7 +11,7 @@
 <body>
     <h1>Edit Menu: {{ $menu->name }}</h1>
 
-    <form action="{{ route('menu.update', $menu->id) }}" method="POST">
+    <form action="{{ route('menu.update', $menu->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -39,6 +39,18 @@
             <option value="active" {{ $menu->status == 'active' ? 'selected' : '' }}>Aktif</option>
             <option value="inactive" {{ $menu->status == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
         </select><br><br>
+
+        <!-- Gambar -->
+        <label>Foto Menu Saat Ini:</label><br>
+        @if ($menu->image)
+            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" width="150"><br>
+        @else
+            <em>Tidak ada gambar</em><br>
+        @endif
+        <br>
+
+        <label>Ganti Foto Menu:</label><br>
+        <input type="file" name="image" accept="image/*"><br><br>
 
         <!-- Bahan -->
         <h3>Bahan</h3>

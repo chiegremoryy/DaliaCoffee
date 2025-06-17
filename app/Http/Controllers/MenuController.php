@@ -7,21 +7,18 @@ use App\Models\Category;
 use App\Models\ingredients;
 use App\Models\menu_ingredient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
-    /**
-     * Tampilkan semua menu untuk pembeli (katalog).
-     */
+    public function katalog()
+    {
+        $menus = Menu::where('status', 'active')->with('category')->get();
+        return view('katalog', compact('menus'));
+    }
     public function index(Request $request)
     {
         $menus = Menu::with('category', 'menuIngredients.ingredient')->get();
-        // Jika rute yang dipanggil adalah 'katalog', tampilkan untuk pembeli
-        if ($request->routeIs('katalog')) {
-            return view('katalog', compact('menus'));
-        }
-
-        // Jika tidak, tampilkan view untuk admin
         return view('menu.index', compact('menus'));
     }
 
@@ -42,23 +39,28 @@ class MenuController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'ingredients.*.ingredient_id' => 'required|exists:ingredients,id',
             'ingredients.*.quantity' => 'required|numeric|min:1',
         ]);
 
-        // Simpan data menu (tanpa ingredients)
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('menu_images', 'public')
+            : null;
+
         $menu = Menu::create([
             'name' => $request->name,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'price' => $request->price,
             'status' => $request->status,
+            'image' => $imagePath,
         ]);
 
-        // Simpan data ingredients
         foreach ($request->ingredients as $ingredient) {
             menu_ingredient::create([
                 'menu_id' => $menu->id,
@@ -100,26 +102,36 @@ class MenuController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'ingredients.*.ingredient_id' => 'required|exists:ingredients,id',
             'ingredients.*.quantity' => 'required|numeric|min:1',
         ]);
 
-        // Update data menu
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($menu->image && Storage::disk('public')->exists($menu->image)) {
+                Storage::disk('public')->delete($menu->image);
+            }
+
+            $menu->image = $request->file('image')->store('menu_images', 'public');
+        }
+
         $menu->update([
             'name' => $request->name,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'price' => $request->price,
             'status' => $request->status,
+            'image' => $menu->image,
         ]);
 
-        // Hapus semua ingredients yang ada sebelumnya
         $menu->menuIngredients()->delete();
 
-        // Simpan data ingredients baru
         foreach ($request->ingredients as $ingredient) {
             menu_ingredient::create([
                 'menu_id' => $menu->id,

@@ -6,6 +6,12 @@
 <body>
     <h1>Detail Menu: {{ $menu->name }}</h1>
 
+    @if ($menu->image)
+        <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" width="250">
+    @else
+        <p><em>Tidak ada gambar untuk menu ini.</em></p>
+    @endif
+
     <p><strong>Kategori:</strong> {{ $menu->category->name ?? '-' }}</p>
     <p><strong>Harga:</strong> Rp{{ number_format($menu->price, 0, ',', '.') }}</p>
     <p><strong>Status:</strong> {{ $menu->status }}</p>
