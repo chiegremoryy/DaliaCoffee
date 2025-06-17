@@ -6,7 +6,7 @@
 <body>
     <h1>Tambah Menu Baru</h1>
 
-    <form action="{{ route('menu.store') }}" method="POST">
+    <form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <label>Nama Menu:</label><br>
@@ -23,13 +23,16 @@
         </select><br><br>
 
         <label>Harga:</label><br>
-        <input type="number" name="price" step="100"><br><br>
+        <input type="number" name="price"><br><br>
 
         <label>Status:</label><br>
         <select name="status">
             <option value="active">Aktif</option>
             <option value="inactive">Tidak Aktif</option>
         </select><br><br>
+
+        <label>Foto Menu:</label><br>
+        <input type="file" name="image" accept="image/*"><br><br>
 
         <label>Bahan (Ingredients):</label><br>
         <div id="ingredients-wrapper">

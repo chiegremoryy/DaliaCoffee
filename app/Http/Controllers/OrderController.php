@@ -6,20 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Menu;
-use App\Models\ingredients;
 use App\Models\stock_histories;
-use App\Models\menu_ingredient;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\OrderExport;
 use Barryvdh\DomPDF\Facade\Pdf;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OrderController extends Controller
 {
-    //
     public function index()
     {
         $orders = Order::with('orderItems')->latest()->get();
@@ -118,7 +110,41 @@ class OrderController extends Controller
     public function print(Order $order)
     {
         $order->load('orderItems.menu');
-        return view('orders.print', compact('order'));
+
+        $qrBase64 = null;
+
+        if ($order->payment_method === 'qris') {
+            $payload = [
+                "qrisCode" => "00020101021126760024ID.CO.SPEEDCASH.MERCHANT01189360081530001471020215ID10240014710270303UKE51440014ID.CO.QRIS.WWW0215ID10243551171010303UKE5204481653033605802ID5912NR CREATIONZ6008SEMARANG61055018962410509S244071850117202506172030177620703A016304354A",
+                "nominal" => (string)$order->total_amount,
+                "feeType" => "r",
+                "fee" => "0",
+                "includeFee" => false
+            ];
+
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://qris-statis-to-dinamis.vercel.app/generate-qris',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_HTTPHEADER => [
+                    'User-Agent: Laravel',
+                    'Content-Type: application/json',
+                ],
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+            curl_close($curl);
+
+            if (!$error) {
+                $data = json_decode($response, true);
+                $qrBase64 = $data['qrCode'] ?? null;
+            }
+        }
+
+        return view('orders.print', compact('order', 'qrBase64'));
     }
 
     public function report(Request $request)
