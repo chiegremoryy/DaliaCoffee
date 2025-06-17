@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', [MenuController::class, 'katalog'])->name('home');
 
@@ -57,3 +58,11 @@ Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->
 // Route Laporan Order
 Route::get('/laporan', [OrderController::class, 'report'])->name('orders.report')->middleware('auth', 'role:kasir,owner');
 Route::get('/laporan/export/pdf', [OrderController::class, 'exportPDF'])->name('orders.export.pdf')->middleware('auth', 'role:kasir,owner');
+
+// Route Categories
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index')->middleware('auth', 'role:owner');
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create')->middleware('auth', 'role:owner');
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store')->middleware('auth', 'role:owner');
+Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit')->middleware('auth', 'role:owner');
+Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update')->middleware('auth', 'role:owner');
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy')->middleware('auth', 'role:owner');
