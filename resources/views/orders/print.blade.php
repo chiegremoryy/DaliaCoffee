@@ -117,7 +117,7 @@
 
     <!-- Back Link -->
     <div class="back-link">
-        <a href="{{ route('orders.create') }}">Kembali ke Halaman Buat Order Baru</a>
+        <a href="{{ route('orders.index') }}">Kembali ke Halaman Buat Order Baru</a>
     </div>
 
     <!-- Bootstrap 5 JS Script -->

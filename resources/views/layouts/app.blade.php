@@ -116,6 +116,11 @@
     <div class="d-flex flex-wrap">
         <!-- Sidebar -->
         <aside class="sidebar position-relative">
+            <!-- LOGO -->
+            <div class="text-center mb-2">
+                <img src="{{ asset('images/dalia-coffee2.png') }}" alt="Logo Dalia Coffee" style="max-width: 200px;">
+            </div>
+
             <h4 class="mb-4">{{ ucfirst(Auth::user()->role) }} Dashboard</h4>
             <hr class="text-light mb-4">
 
