@@ -25,6 +25,9 @@
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrderModal">
                     <i class="fas fa-plus me-1"></i> Buat Order Baru
                 </button>
+                <a href="{{ route('orders.report') }}" class="btn btn-info text-white">
+                    <i class="fas fa-chart-line me-1"></i> Laporan Penjualan
+                </a>
             </div>
 
             <!-- Orders Table -->
