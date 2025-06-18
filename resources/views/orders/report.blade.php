@@ -1,106 +1,63 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Penjualan</title>
+@section('content')
+<div class="container mt-4">
 
-    <!-- Link to Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white text-center border-bottom">
+            <h2 class="mb-0 text-dark fw-semibold">Laporan Penjualan</h2>
+        </div>
 
-    <style>
-        body {
-            font-family: 'DejaVu Sans', sans-serif;
-            font-size: 14px;
-        }
+        <div class="card-body">
 
-        .table th, .table td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        .table thead {
-            background-color: #f8f9fa;
-        }
-
-        .form-container {
-            margin-bottom: 20px;
-        }
-
-        .filter-form input, .filter-form button {
-            margin-right: 10px;
-        }
-
-        .back-link a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container mt-5">
-
-        <h1 class="text-center mb-4">Laporan Penjualan</h1>
-
-        <!-- Filter Form -->
-        <div class="form-container">
-            <form method="GET" action="{{ route('orders.report') }}" class="d-flex justify-content-start">
-                <div class="form-group me-3">
-                    <label for="from" class="form-label">Dari Tanggal:</label>
+            <!-- Filter Form -->
+            <form method="GET" action="{{ route('orders.report') }}" class="row g-3 align-items-end mb-4">
+                <div class="col-md-4">
+                    <label for="from" class="form-label">Dari Tanggal</label>
                     <input type="date" name="from" id="from" value="{{ request('from') }}" class="form-control">
                 </div>
-                <div class="form-group me-3">
-                    <label for="to" class="form-label">Sampai Tanggal:</label>
+                <div class="col-md-4">
+                    <label for="to" class="form-label">Sampai Tanggal</label>
                     <input type="date" name="to" id="to" value="{{ request('to') }}" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter me-1"></i> Filter
+                    </button>
+                    <a href="{{ route('orders.export.pdf', request()->only('from', 'to')) }}" target="_blank" class="btn btn-danger">
+                        <i class="fas fa-file-pdf me-1"></i> Export PDF
+                    </a>
+                </div>
             </form>
+
+            <!-- Sales Report Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Tanggal</th>
+                            <th>Total</th>
+                            <th>Metode Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($orders as $order)
+                            <tr>
+                                <td>{{ $order->invoice_code }}</td>
+                                <td>{{ $order->order_date->format('d-m-Y') }}</td>
+                                <td>Rp{{ number_format($order->total_amount, 0, ',', '.') }}</td>
+                                <td>{{ ucfirst($order->payment_method) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center">Tidak ada data penjualan untuk rentang tanggal tersebut.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <!-- Export PDF Button -->
-        <div class="mb-3">
-            <a href="{{ route('orders.export.pdf', request()->only('from', 'to')) }}" target="_blank" class="btn btn-danger">Export PDF</a>
-        </div>
-
-        <!-- Sales Report Table -->
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Invoice</th>
-                    <th>Tanggal</th>
-                    <th>Total</th>
-                    <th>Metode</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orders as $order)
-                <tr>
-                    <td>{{ $order->invoice_code }}</td>
-                    <td>{{ $order->order_date->format('d-m-Y') }}</td>
-                    <td>Rp{{ number_format($order->total_amount) }}</td>
-                    <td>{{ ucfirst($order->payment_method) }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <!-- Back Link -->
-        <div class="back-link text-center mt-3">
-            <a href="{{ route('orders.index') }}">← Kembali</a>
-        </div>
-
     </div>
-
-    <!-- Bootstrap 5 JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>
+</div>
+@endsection
