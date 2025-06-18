@@ -21,12 +21,10 @@
 
             <!-- Action Buttons -->
             <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                <!-- Tombol Modal -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOrderModal">
                     <i class="fas fa-plus me-1"></i> Buat Order Baru
-                </a>
-                <a href="{{ route('orders.report') }}" class="btn btn-info text-white">
-                    <i class="fas fa-chart-line me-1"></i> Laporan Penjualan
-                </a>
+                </button>
             </div>
 
             <!-- Orders Table -->
@@ -67,7 +65,21 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
 
+<!-- Modal Create Order -->
+<div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="createOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buat Order Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                @include('orders.create', ['menus' => \App\Models\Menu::where('status', 'active')->get()])
+            </div>
         </div>
     </div>
 </div>
