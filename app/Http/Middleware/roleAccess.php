@@ -14,10 +14,18 @@ class roleAccess
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $Auth = Auth::user();
-        if ($Auth->role !== $role) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response('Unauthenticated', 401);
+        }
+
+        $userRole = strtolower($user->role);
+        $allowedRoles = array_map('strtolower', $roles);
+
+        if (!in_array($userRole, $allowedRoles)) {
             return response('Unauthorized access', 403);
         }
 
