@@ -1,18 +1,11 @@
-<!-- resources/views/categories/index.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Categories</h1>
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <h1 class="mb-4">Kategori</h1>
 
         <!-- Create category button -->
-        <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Create Category</a>
+        <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">+ Tambah Kategori</a>
 
         <!-- Success message -->
         @if (session('success'))
@@ -22,36 +15,35 @@
         @endif
 
         <!-- Categories Table -->
-        <table class="table">
+        <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Actions</th>
+                    <th>Nama</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $category)
+                @forelse ($categories as $category)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $category->name }}</td>
                         <td>
-                            <!-- Edit Button -->
-                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                            <!-- Delete Button -->
-                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center">Belum ada kategori.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

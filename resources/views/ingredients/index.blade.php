@@ -1,101 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Bahan Baku</title>
-    <!-- Link to Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f7fc;
-        }
+@extends('layouts.app')
 
-        .container {
-            max-width: 900px;
-            margin-top: 50px;
-        }
+@section('content')
+<div class="container mt-4">
+    <h1 class="mb-4">Daftar Bahan Baku</h1>
 
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .alert {
-            margin-bottom: 20px;
-        }
-
-        .btn-primary {
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th {
-            background-color: #f8f9fa;
-        }
-
-        .table td, .table th {
-            vertical-align: middle;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #e9ecef;
-        }
-
-        .back-link {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Daftar Bahan Baku</h1>
-
-        <!-- Add Ingredient Button -->
-        <a href="{{ route('ingredients.create') }}" class="btn btn-primary">+ Tambah Bahan Baku</a><br><br>
-        <a href="{{ route('stocks.index') }}" class="btn btn-primary">→ Lihat Riwayat Stok</a>
-
-        <!-- Success Message -->
-        @if(session('success'))
-            <div class="alert alert-success mt-3">{{ session('success') }}</div>
-        @endif
-
-        <!-- Ingredients Table -->
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Stok</th>
-                    <th>Satuan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($ingredients as $ingredient)
-                    <tr>
-                        <td>{{ $ingredient->name }}</td>
-                        <td>{{ $ingredient->stock }}</td>
-                        <td>{{ $ingredient->unit }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <!-- Back Link -->
-        <div class="back-link">
-            <a href="{{ route('home') }}">← Kembali ke Halaman Utama</a>
-        </div>
+    <!-- Tombol tambah bahan dan lihat stok -->
+    <div class="mb-3 d-flex gap-2">
+        <a href="{{ route('ingredients.create') }}" class="btn btn-primary">+ Tambah Bahan Baku</a>
+        <a href="{{ route('stocks.index') }}" class="btn btn-secondary">→ Lihat Riwayat Stok</a>
     </div>
 
-    <!-- Bootstrap 5 JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Pesan sukses -->
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <!-- Tabel bahan baku -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Nama</th>
+                <th>Stok</th>
+                <th>Satuan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($ingredients as $ingredient)
+                <tr>
+                    <td>{{ $ingredient->name }}</td>
+                    <td>{{ $ingredient->stock }}</td>
+                    <td>{{ $ingredient->unit }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" class="text-center">Belum ada bahan baku.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <!-- Link kembali -->
+    <div class="mt-3">
+        <a href="{{ route('home') }}">← Kembali ke Halaman Utama</a>
+    </div>
+</div>
+@endsection
