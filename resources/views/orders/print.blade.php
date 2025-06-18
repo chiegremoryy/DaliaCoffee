@@ -94,7 +94,7 @@
                         <td>{{ $item->menu->name }}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>Rp{{ number_format($item->menu->price) }}</td>
-                        <td>Rp{{ number_format($item->total_price) }}</td>
+                        <td>Rp{{ number_format($item->menu->price * $item->quantity) }}</td>
                     </tr>
                     @endforeach
                     <tr>
