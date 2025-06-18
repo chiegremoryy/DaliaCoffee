@@ -59,35 +59,36 @@
 
             <hr class="text-secondary mb-5">
 
-            
+
             <!-- Menu berdasarkan role -->
             <ul class="nav flex-column gap-2">
                 @if(Auth::user()->role === 'owner')
-                    <li class="nav-item">
-                        <a href="{{ route('menu.index') }}" class="nav-link text-white {{ Route::is('menu.index') ? 'active' : '' }}">📋 Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('categories.index') }}" class="nav-link text-white {{ Route::is('categories.index') ? 'active' : '' }}">📂 Kategori</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('ingredients.index') }}" class="nav-link text-white {{ Route::is('ingredients.index') ? 'active' : '' }}">🥬 Bahan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('stocks.index') }}" class="nav-link text-white {{ Route::is('stocks.index') ? 'active' : '' }}">📦 Stok</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('karyawan.index') }}" class="nav-link text-white {{ Route::is('karyawan.index') ? 'active' : '' }}">👥 Karyawan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('orders.report') }}" class="nav-link text-white {{ Route::is('orders.report') ? 'active' : '' }}">📈 Laporan</a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{ route('menu.index') }}" class="nav-link text-white {{ Route::is('menu.index') ? 'active' : '' }}">📋 Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('categories.index') }}" class="nav-link text-white {{ Route::is('categories.index') ? 'active' : '' }}">📂 Kategori</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('ingredients.index') }}" class="nav-link text-white {{ Route::is('ingredients.index') ? 'active' : '' }}">🥬 Bahan</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('stocks.index') }}" class="nav-link text-white {{ Route::is('stocks.index') ? 'active' : '' }}">📦 Stok</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('karyawan.index') }}" class="nav-link text-white {{ Route::is('karyawan.index') ? 'active' : '' }}">👥 Karyawan</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('orders.report') }}" class="nav-link text-white {{ Route::is('orders.report') ? 'active' : '' }}">📈 Laporan</a>
+                </li>
                 @elseif(Auth::user()->role === 'kasir')
-                    <li class="nav-item">
-                        <a href="{{ route('orders.index') }}" class="nav-link text-white {{ Route::is('orders.index') ? 'active' : '' }}">💵 Transaksi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('orders.history') }}" class="nav-link text-white {{ Route::is('orders.history') ? 'active' : '' }}">🧾 Riwayat</a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{ route('orders.index') }}" class="nav-link text-white {{ Route::is('orders.index') ? 'active' : '' }}">💵 Transaksi</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('orders.report') }}" class="nav-link text-white {{ Route::is('orders.report') ? 'active' : '' }}">📊 Laporan Penjualan</a>
+                </li>
+
                 @endif
             </ul>
 
@@ -105,7 +106,7 @@
             @yield('content')
         </main>
     </div>
-    @stack('scripts')   
+    @stack('scripts')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

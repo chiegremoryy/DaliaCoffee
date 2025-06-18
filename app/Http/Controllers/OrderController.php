@@ -93,7 +93,8 @@ class OrderController extends Controller
             DB::commit();
 
             // ✅ Redirect ke halaman print invoice
-            return redirect()->route('orders.print', $order->id);
+            return redirect()->route('orders.index')->with('success', 'Order berhasil disimpan!');
+
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => $e->getMessage()]);
