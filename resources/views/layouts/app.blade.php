@@ -158,6 +158,11 @@
                             <i class="fas fa-cash-register"></i> Transaksi
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('orders.report') }}" class="nav-link {{ Route::is('orders.report') ? 'active' : '' }}">
+                            <i class="fas fa-chart-line"></i> Laporan
+                        </a>
+                    </li>
                 @endif
             </ul>
 
