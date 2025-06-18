@@ -1,114 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <!-- Link ke CDN Bootstrap 5 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign In | Dalia Coffee</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         body {
-            background-color: #f4f7fc;
-        }
-
-        .card {
-            border-radius: 15px;
-        }
-
-        .login-container {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #d7ccc8, #a1887f);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #e9ecef;
         }
 
-        .card-body {
-            padding: 2rem;
+        .login-wrapper {
+            background-color: #fff8f0;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            overflow: hidden;
         }
 
-        h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2c3e50;
+        .login-illustration {
+            background: linear-gradient(to top, #6d4c41, #4e342e);
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .login-illustration img {
+            width: 100%;
+            max-width: 500px;
             margin-bottom: 20px;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 40px;
+            background-color: #fff8f0;
+        }
+
+        .login-form img.logo {
+            max-width: 200px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .login-form h2 {
+            font-weight: 600;
+            color: #4e342e;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-label {
+            color: #5d4037;
         }
 
         .form-control {
-            height: 50px;
+            height: 48px;
             font-size: 16px;
+            background-color: #fbe9e7;
+            border: 1px solid #d7ccc8;
+            color: #4e342e;
+        }
+
+        .form-control::placeholder {
+            color: #a1887f;
+            opacity: 1;
+        }
+
+        .form-control:focus {
+            border-color: #a1887f;
+            box-shadow: 0 0 0 0.15rem rgba(161, 136, 127, 0.25);
         }
 
         .btn-primary {
-            font-size: 16px;
-            padding: 12px;
+            background-color: #6d4c41;
+            border: none;
         }
 
-        .alert {
-            margin-bottom: 20px;
-            font-size: 14px;
+        .btn-primary:hover {
+            background-color: #5d4037;
         }
 
         .register-link {
+            margin-top: 20px;
             text-align: center;
-            margin-top: 15px;
+            color: #6d4c41;
         }
 
         .register-link a {
+            color: #8d6e63;
             text-decoration: none;
-            color: #3498db;
         }
 
         .register-link a:hover {
             text-decoration: underline;
         }
 
-        @media (max-width: 576px) {
-            .card {
-                width: 90%;
+        @media (max-width: 768px) {
+            .login-wrapper {
+                flex-direction: column;
             }
 
-            h2 {
-                font-size: 20px;
+            .login-form {
+                padding: 20px;
+            }
+
+            .login-illustration {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="login-wrapper">
+        <!-- Side Illustration -->
+        <div class="login-illustration text-center">
+            <img src="{{ asset('images/ilustrasi-kopi.png') }}" alt="Coffee Art">
+            <p>Welcome back to your cozy corner!☕</p>
+        </div>
 
-    <div class="login-container">
-        <div class="card shadow-lg" style="width: 400px;">
-            <div class="card-body">
-                <h2 class="text-center">Login</h2>
+        <!-- Login Form -->
+        <div class="login-form">
+            <!-- Logo -->
+            <img src="{{ asset('images/dalia-coffee.png') }}" alt="Coffee Shop Logo" class="logo">
 
-                <!-- Error Message -->
-                @if ($errors->any())
-                    <div class="alert alert-danger">{{ $errors->first() }}</div>
-                @endif
+            <h2>Sign In</h2>
 
-                <!-- Form Login -->
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
-                </form>
+            @if ($errors->any())
+                <div class="alert alert-danger">{{ $errors->first() }}</div>
+            @endif
 
-                <!-- Register Link -->
-                <div class="register-link">
-                    <p class="mb-0">Belum punya akun? <a href="{{ route('register') }}">Register</a></p>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required placeholder="e.g. barista@coffee.com">
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
         </div>
     </div>
 
-    <!-- Script Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
