@@ -19,9 +19,9 @@
             @endif
 
             <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('karyawan.create') }}" class="btn btn-success">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="fas fa-plus me-1"></i> Tambah Karyawan
-                </a>
+                </button>
             </div>
 
             <div class="table-responsive">
@@ -79,18 +79,17 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password{{ $user->id }}" class="form-label">Password (Opsional)</label>
-                                                <input type="password" class="form-control" id="password{{ $user->id }}" name="password" placeholder="Biarkan kosong jika tidak ingin mengubah">
+                                                <input type="password" class="form-control" id="password{{ $user->id }}" name="password" placeholder="Kosongkan jika tidak ingin mengganti">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-warning text-white">Simpan Perubahan</button>
+                                            <button type="submit" class="btn btn-warning text-white">Simpan</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-
                         @empty
                         <tr>
                             <td colspan="3" class="text-center">Belum ada data karyawan.</td>
@@ -99,6 +98,41 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tambah Karyawan Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="createModalLabel">Tambah Karyawan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <form action="{{ route('karyawan.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

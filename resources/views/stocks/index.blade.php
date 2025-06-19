@@ -13,9 +13,9 @@
         <div class="card-body">
             <!-- Tombol Aksi -->
             <div class="d-flex justify-content-between mb-3">
-                <a href="{{ route('stocks.create') }}" class="btn btn-success">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahStokModal">
                     <i class="fas fa-plus me-1"></i> Tambah Stok Bahan
-                </a>
+                </button>
                 <a href="{{ route('ingredients.index') }}" class="btn btn-info text-white">
                     <i class="fas fa-list me-1"></i> Lihat Daftar Bahan Baku
                 </a>
@@ -96,4 +96,76 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Tambah Stok -->
+<div class="modal fade" id="tambahStokModal" tabindex="-1" aria-labelledby="tambahStokModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tambahStokModalLabel">Tambah Stok Masuk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('stocks.store') }}">
+          @csrf
+
+          <div class="mb-3">
+            <label for="ingredient_id" class="form-label">Bahan</label>
+            <select name="ingredient_id" id="ingredientSelect" class="form-select" onchange="updateStockInfo()">
+                <option value="">-- Pilih Bahan --</option>
+                @foreach ($ingredients as $ing)
+                    <option 
+                        value="{{ $ing->id }}"
+                        data-stock="{{ $ing->stock }}"
+                        data-unit="{{ $ing->unit }}"
+                    >
+                        {{ $ing->name }}
+                    </option>
+                @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3" id="stockInfo" style="display: none">
+            <strong>Stok Saat Ini:</strong> <span id="stockValue"></span>
+          </div>
+
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Jumlah Tambahan</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
+          </div>
+
+          <input type="hidden" name="type" value="in">
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Deskripsi (opsional)</label>
+            <textarea name="description" id="description" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function updateStockInfo() {
+        const select = document.getElementById('ingredientSelect');
+        const selectedOption = select.options[select.selectedIndex];
+        const stock = selectedOption.getAttribute('data-stock');
+        const unit = selectedOption.getAttribute('data-unit');
+
+        if (stock && unit) {
+            document.getElementById('stockValue').innerText = `${stock} ${unit}`;
+            document.getElementById('stockInfo').style.display = 'block';
+        } else {
+            document.getElementById('stockInfo').style.display = 'none';
+        }
+    }
+</script>
 @endsection

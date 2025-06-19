@@ -22,9 +22,10 @@
             <!-- Tombol aksi -->
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex gap-2">
-                    <a href="{{ route('ingredients.create') }}" class="btn btn-success">
+                    <!-- Tombol trigger modal -->
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
                         <i class="fas fa-plus me-1"></i> Tambah Bahan Baku
-                    </a>
+                    </button>
                     <a href="{{ route('stocks.index') }}" class="btn btn-secondary">
                         <i class="fas fa-boxes-stacked me-1"></i> Lihat Riwayat Stok
                     </a>
@@ -59,4 +60,40 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Tambah Bahan Baku -->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('ingredients.store') }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addIngredientModalLabel">Tambah Bahan Baku</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama Bahan</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="unit" class="form-label">Satuan</label>
+                        <input type="text" name="unit" id="unit" class="form-control" placeholder="misal: gr, butir, bungkus" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stok Awal</label>
+                        <input type="number" name="stock" id="stock" class="form-control" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS (Jika belum ada di layout) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
