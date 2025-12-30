@@ -14,9 +14,10 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('orderItems')->latest()->paginate(5); // pagination 5 per halaman
+        $orders = Order::with('orderItems')->latest()->paginate(5);
         return view('orders.index', compact('orders'));
     }
+
 
     public function create()
     {
@@ -154,7 +155,7 @@ class OrderController extends Controller
         $orders = Order::with('orderItems.menu')
             ->whereBetween('order_date', [$start, $end])
             ->orderBy('order_date', 'desc')
-            ->paginate(5) // pagination 10 per halaman
+            ->paginate(10) // pagination 10 per halaman
             ->withQueryString(); // agar filter tetap aktif
 
         // Total halaman ini

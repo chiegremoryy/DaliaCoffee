@@ -13,8 +13,8 @@ class StockController extends Controller
         // Riwayat stok dengan pagination
         $stocks = stock_histories::with('ingredient')->latest()->paginate(5);
 
-        // Total stok (tanpa pagination) - bisa juga dipaginate kalau mau
-        $ingredients = ingredients::all();
+        // Total stok dengan pagination juga
+        $ingredients = ingredients::paginate(5);
 
         return view('stocks.index', compact('stocks', 'ingredients'));
     }
