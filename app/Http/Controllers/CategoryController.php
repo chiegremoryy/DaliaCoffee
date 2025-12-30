@@ -10,7 +10,9 @@ class CategoryController extends Controller
     // Display a listing of categories
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('created_at', 'desc')
+            ->paginate(8); // ⬅️ jumlah per halaman (bebas)
+
         return view('categories.index', compact('categories'));
     }
 
@@ -20,49 +22,51 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    // Store a newly created category in storage
+    // Store a newly created category
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        Category::create($request->all());
+        Category::create([
+            'name' => $request->name
+        ]);
 
-        return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully.');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    // Show the form for editing the specified category
+    // Show the form for editing
     public function edit(Category $category)
     {
         return view('categories.edit', compact('category'));
     }
 
-    // Update the specified category in storage
+    // Update category
     public function update(Request $request, Category $category)
     {
-        // Validate the incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        // Update the category's name (only the 'name' field is updated)
         $category->update([
             'name' => $request->name
         ]);
 
-        // Redirect back to the categories index with a success message
-        return redirect()->route('categories.index')
-            ->with('success', 'Category updated successfully.');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    // Remove the specified category from storage
+    // Delete category
     public function destroy(Category $category)
     {
         $category->delete();
 
-        return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully.');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }

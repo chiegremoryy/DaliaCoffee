@@ -10,8 +10,12 @@ class StockController extends Controller
 {
     public function index()
     {
-        $stocks = stock_histories::with('ingredient')->latest()->get();
-        $ingredients = ingredients::all(); // Total stok sudah tersimpan di kolom `stock`
+        // Riwayat stok dengan pagination
+        $stocks = stock_histories::with('ingredient')->latest()->paginate(5);
+
+        // Total stok (tanpa pagination) - bisa juga dipaginate kalau mau
+        $ingredients = ingredients::all();
+
         return view('stocks.index', compact('stocks', 'ingredients'));
     }
 
@@ -32,7 +36,6 @@ class StockController extends Controller
 
         $ingredient = ingredients::find($request->ingredient_id);
 
-        // Update stock di tabel ingredients
         if ($request->type === 'in') {
             $ingredient->stock += $request->quantity;
         } else {
@@ -43,7 +46,6 @@ class StockController extends Controller
         }
         $ingredient->save();
 
-        // Simpan histori
         stock_histories::create($request->all());
 
         return redirect()->route('stocks.index')->with('success', 'Transaksi stok berhasil ditambahkan.');
@@ -51,7 +53,7 @@ class StockController extends Controller
 
     public function destroy(stock_histories $stock)
     {
-        // Optional: rollback stok
+        // Rollback stok
         if ($stock->type === 'in') {
             $stock->ingredient->stock -= $stock->quantity;
         } else {

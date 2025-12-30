@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('orderItems')->latest()->get();
+        $orders = Order::with('orderItems')->latest()->paginate(5); // pagination 5 per halaman
         return view('orders.index', compact('orders'));
     }
 
@@ -92,7 +92,7 @@ class OrderController extends Controller
 
             DB::commit();
 
-            // ✅ Redirect ke halaman print invoice
+            // Redirect ke halaman print invoice
             return redirect()->route('orders.print', $order->id);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -100,17 +100,15 @@ class OrderController extends Controller
         }
     }
 
-
     public function show(Order $order)
     {
-        $order->load('orderItems.menu'); // Eager load
+        $order->load('orderItems.menu');
         return view('orders.show', compact('order'));
     }
 
     public function print(Order $order)
     {
         $order->load('orderItems.menu');
-
         $qrBase64 = null;
 
         if ($order->payment_method === 'qris') {
@@ -147,22 +145,22 @@ class OrderController extends Controller
         return view('orders.print', compact('order', 'qrBase64'));
     }
 
+    // === REVISI: report dengan pagination ===
     public function report(Request $request)
     {
-        // Ambil tanggal dari request atau pakai default
         $start = $request->start_date ?? now()->startOfMonth()->toDateString();
         $end = $request->end_date ?? now()->toDateString();
 
-        // Ambil data order beserta relasi menu dari order items
         $orders = Order::with('orderItems.menu')
             ->whereBetween('order_date', [$start, $end])
             ->orderBy('order_date', 'desc')
-            ->get();
+            ->paginate(5) // pagination 10 per halaman
+            ->withQueryString(); // agar filter tetap aktif
 
-        // Hitung total penjualan
-        $total = $orders->sum('total_amount');
+        // Total halaman ini
+        $totalPerPage = $orders->sum('total_amount');
 
-        return view('orders.report', compact('orders', 'start', 'end', 'total'));
+        return view('orders.report', compact('orders', 'start', 'end', 'totalPerPage'));
     }
 
     public function exportPDF(Request $request)
