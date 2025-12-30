@@ -1,99 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Ingredient</title>
-    <!-- Link to Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Add Ingredient | Dalia Coffee</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         body {
-            background-color: #f4f7fc;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .card {
-            border-radius: 15px;
+        .glass-effect {
+            background: rgba(255, 248, 240, 0.95);
+            backdrop-filter: blur(10px);
         }
 
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-        }
-
-        .card-body {
-            padding: 2rem;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
-        .form-control {
-            height: 50px;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            font-size: 16px;
-            padding: 12px;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-link a {
-            text-decoration: none;
-            color: #3498db;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
+        .coffee-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234e342e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 </head>
-<body>
 
-    <div class="container">
-        <div class="card shadow-lg">
-            <div class="card-body">
-                <h1 class="text-center">Tambah Bahan Baku</h1>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8d6e63] via-[#a1887f] to-[#bcaaa4] coffee-pattern p-6">
 
-                <!-- Form for Adding Ingredient -->
-                <form action="{{ route('ingredients.store') }}" method="POST">
-                    @csrf
+    <div class="w-full max-w-xl glass-effect rounded-3xl shadow-2xl p-8 sm:p-12">
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nama Bahan</label>
-                        <input type="text" name="name" id="name" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="unit" class="form-label">Satuan</label>
-                        <input type="text" name="unit" id="unit" class="form-control" placeholder="misal: gr, butir, bungkus" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="stock" class="form-label">Stok Awal</label>
-                        <input type="number" name="stock" id="stock" class="form-control" min="0" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100">Simpan</button>
-                </form>
-
-                <!-- Back to Ingredients List Link -->
-                <div class="back-link">
-                    <a href="{{ route('ingredients.index') }}">← Kembali ke daftar</a>
-                </div>
-            </div>
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-semibold text-[#3e2723] mb-2">
+                Tambah Bahan Baku
+            </h1>
+            <p class="text-sm text-[#6d4c41]">
+                Tambahkan bahan baku baru ke sistem
+            </p>
         </div>
+
+        <!-- Form -->
+        <form action="{{ route('ingredients.store') }}" method="POST" class="space-y-6">
+            @csrf
+
+            <div>
+                <label for="name" class="block text-sm font-medium text-[#4e342e] uppercase tracking-wide mb-2">
+                    Nama Bahan
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="Contoh: Gula Aren"
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           placeholder-[#a1887f] focus:outline-none focus:border-[#6d4c41]
+                           focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+            </div>
+
+            <div>
+                <label for="unit" class="block text-sm font-medium text-[#4e342e] uppercase tracking-wide mb-2">
+                    Satuan
+                </label>
+                <input
+                    type="text"
+                    id="unit"
+                    name="unit"
+                    required
+                    placeholder="misal: gr, butir, bungkus"
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           placeholder-[#a1887f] focus:outline-none focus:border-[#6d4c41]
+                           focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+            </div>
+
+            <div>
+                <label for="stock" class="block text-sm font-medium text-[#4e342e] uppercase tracking-wide mb-2">
+                    Stok Awal
+                </label>
+                <input
+                    type="number"
+                    id="stock"
+                    name="stock"
+                    min="0"
+                    required
+                    placeholder="0"
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           focus:outline-none focus:border-[#6d4c41]
+                           focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-[#5d4037] to-[#6d4c41]
+                       text-white font-semibold py-4 rounded-xl
+                       hover:from-[#4e342e] hover:to-[#5d4037]
+                       transform hover:scale-[1.02]
+                       transition-all duration-300 shadow-lg hover:shadow-xl">
+                Simpan Bahan
+            </button>
+        </form>
+
+        <!-- Back Link -->
+        <div class="mt-6 text-center">
+            <a href="{{ route('ingredients.index') }}"
+               class="text-sm font-semibold text-[#5d4037]
+                      hover:text-[#4e342e]
+                      underline decoration-2 underline-offset-4">
+                Back to Ingredients List
+            </a>
+        </div>
+
     </div>
 
-    <!-- Bootstrap 5 JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
