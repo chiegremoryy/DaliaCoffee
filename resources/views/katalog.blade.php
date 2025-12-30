@@ -73,39 +73,27 @@
 <div class="container">
     <h1 class="text-center">Our Menu</h1>
 
-    <!-- Section: Makanan -->
-    <h2 class="section-title">Makanan</h2>
-    <div class="row g-4">
-        @foreach ($menus->where('category.name', 'Makanan') as $menu)
-            <div class="col-md-4">
-                <div class="menu-item">
-                    @if($menu->image)
-                        <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}">
-                    @endif
-                    <h4>{{ $menu->name }}</h4>
-                    <p class="price">Rp{{ number_format($menu->price, 0, ',', '.') }}</p>
-                    <p><small>{{ $menu->description }}</small></p>
-                </div>
-            </div>
-        @endforeach
-    </div>
+    @php
+        $categories = $menus->pluck('category.name')->unique();
+    @endphp
 
-    <!-- Section: Minuman -->
-    <h2 class="section-title">Minuman</h2>
-    <div class="row g-4">
-        @foreach ($menus->where('category.name', 'Minuman') as $menu)
-            <div class="col-md-4">
-                <div class="menu-item">
-                    @if($menu->image)
-                        <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}">
-                    @endif
-                    <h4>{{ $menu->name }}</h4>
-                    <p class="price">Rp{{ number_format($menu->price, 0, ',', '.') }}</p>
-                    <p><small>{{ $menu->description }}</small></p>
+    @foreach ($categories as $category)
+        <h2 class="section-title">{{ $category }}</h2>
+        <div class="row g-4">
+            @foreach ($menus->where('category.name', $category) as $menu)
+                <div class="col-md-4">
+                    <div class="menu-item">
+                        @if($menu->image)
+                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}">
+                        @endif
+                        <h4>{{ $menu->name }}</h4>
+                        <p class="price">Rp{{ number_format($menu->price, 0, ',', '.') }}</p>
+                        <p><small>{{ $menu->description }}</small></p>
+                    </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    @endforeach
 </div>
 
 <!-- Bootstrap JS -->
