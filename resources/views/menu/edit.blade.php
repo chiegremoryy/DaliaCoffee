@@ -168,50 +168,6 @@
         </div>
     </div>
 
-    <script>
-        let ingredientIndex = {
-            {
-                count($menuIngredients)
-            }
-        };
-
-        function addIngredient() {
-            const list = document.getElementById('ingredient-list');
-            const div = document.createElement('div');
-
-            div.className = `
-            grid grid-cols-1 sm:grid-cols-[1fr_120px_48px] gap-3 items-center
-            bg-[#fffaf5] border border-[#d7ccc8] rounded-2xl p-4
-        `;
-
-            div.innerHTML = `
-            <select name="ingredients[\${ingredientIndex}][ingredient_id]"
-                class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
-                @foreach($allIngredients as $ing)
-                    <option value="{{ $ing->id }}">{{ $ing->name }} ({{ $ing->unit }})</option>
-                @endforeach
-            </select>
-
-            <input type="number" name="ingredients[\${ingredientIndex}][quantity]"
-                min="1" value="1"
-                class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
-
-            <button type="button" onclick="removeIngredient(this)"
-                class="h-12 w-12 rounded-xl bg-red-100 text-red-600
-                       hover:bg-red-500 hover:text-white transition">
-                🗑
-            </button>
-        `;
-
-            list.appendChild(div);
-            ingredientIndex++;
-        }
-
-        function removeIngredient(btn) {
-            btn.parentElement.remove();
-        }
-    </script>
-
 </body>
 
 </html>

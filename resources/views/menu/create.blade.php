@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -79,7 +78,7 @@
                            focus:outline-none focus:border-[#6d4c41]
                            focus:ring-4 focus:ring-[#d7ccc8] transition-all">
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -136,9 +135,9 @@
                                    focus:outline-none focus:border-[#6d4c41]
                                    focus:ring-4 focus:ring-[#d7ccc8] transition-all">
                             @foreach($allIngredients as $ing)
-                                <option value="{{ $ing->id }}">
-                                    {{ $ing->name }} ({{ $ing->unit }})
-                                </option>
+                            <option value="{{ $ing->id }}">
+                                {{ $ing->name }} ({{ $ing->unit }})
+                            </option>
                             @endforeach
                         </select>
 
@@ -175,79 +174,9 @@
         <!-- Back -->
         <div class="mt-6 text-center">
             <a href="{{ route('menu.index') }}"
-               class="text-sm font-semibold text-[#5d4037]
+                class="text-sm font-semibold text-[#5d4037]
                       hover:text-[#4e342e]
                       underline decoration-2 underline-offset-4">
                 Back to Menu List
             </a>
-=======
-@extends('layouts.app')
-
-@section('content')
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h4>Tambah Menu Baru</h4>
         </div>
-        <div class="card-body">
-            <form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                @include('menu._form', ['menu' => null, 'menuIngredients' => []])
-
-                <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-                <a href="{{ route('menu.index') }}" class="btn btn-secondary mt-3">Kembali</a>
-            </form>
->>>>>>> ecee0864c8195647650ba18b1d923e7973cc7118
-        </div>
-
-    </div>
-<<<<<<< HEAD
-
-    <!-- JS (logic tetap) -->
-    <script>
-        let ingredientIndex = 1;
-
-        function addIngredient() {
-            const wrapper = document.getElementById('ingredients-wrapper');
-            const div = document.createElement('div');
-            div.className = 'ingredient-group flex flex-col sm:flex-row gap-3 items-center';
-
-            div.innerHTML = `
-                <select name="ingredients[${ingredientIndex}][ingredient_id]"
-                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8]
-                           focus:outline-none focus:border-[#6d4c41]
-                           focus:ring-4 focus:ring-[#d7ccc8] transition-all">
-                    @foreach($allIngredients as $ing)
-                        <option value="{{ $ing->id }}">
-                            {{ $ing->name }} ({{ $ing->unit }})
-                        </option>
-                    @endforeach
-                </select>
-
-                <input type="number" name="ingredients[${ingredientIndex}][quantity]" min="1" step="0.01" placeholder="Jumlah" required
-                    class="w-full sm:w-32 h-14 px-4 rounded-xl border-2 border-[#d7ccc8]
-                           focus:outline-none focus:border-[#6d4c41]
-                           focus:ring-4 focus:ring-[#d7ccc8] transition-all">
-
-                <button type="button" onclick="removeIngredient(this)"
-                    class="h-14 px-5 rounded-xl bg-red-100 text-red-600 font-semibold hover:bg-red-200">
-                    🗑
-                </button>
-            `;
-
-            wrapper.appendChild(div);
-            ingredientIndex++;
-        }
-
-        function removeIngredient(button) {
-            button.parentElement.remove();
-        }
-    </script>
-
-</body>
-</html>
-=======
-</div>
-@endsection
->>>>>>> ecee0864c8195647650ba18b1d923e7973cc7118
