@@ -1,163 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Menu: {{ $menu->name }}</title>
-    <!-- Link to Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Edit Menu | {{ $menu->name }}</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        .ingredient-item {
-            margin-bottom: 10px;
+        body {
+            font-family: 'Poppins', sans-serif;
         }
-        .form-control, .form-select {
-            height: 50px;
-            font-size: 16px;
+
+        .glass-effect {
+            background: rgba(255, 248, 240, 0.95);
+            backdrop-filter: blur(10px);
         }
-        .ingredient-item select, .ingredient-item input {
-            margin-right: 10px;
-        }
-        .ingredient-item button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .ingredient-item button:hover {
-            background-color: #c0392b;
-        }
-        .back-link {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .back-link a {
-            text-decoration: none;
-            color: #3498db;
-        }
-        .back-link a:hover {
-            text-decoration: underline;
+
+        .coffee-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%234e342e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 </head>
-<body>
 
-    <div class="container mt-5">
-        <!-- Card Wrapper for the Form -->
-        <div class="card shadow-sm">
-            <div class="card-header text-center">
-                <h1>Edit Menu: {{ $menu->name }}</h1>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8d6e63] via-[#a1887f] to-[#bcaaa4] coffee-pattern p-6">
+
+    <div class="w-full max-w-3xl glass-effect rounded-3xl shadow-2xl p-8 sm:p-12">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl text-[#3e2723] mb-2">Edit Menu</h1>
+            <p class="text-sm text-[#6d4c41]">
+                Perbarui detail menu <strong>{{ $menu->name }}</strong>
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ route('menu.update', $menu->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            <!-- Nama -->
+            <div>
+                <label class="block text-sm font-medium text-[#4e342e] mb-2">Nama Menu</label>
+                <input type="text" name="name" value="{{ old('name', $menu->name) }}" required
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8]">
             </div>
-            <div class="card-body">
-                <!-- Edit Menu Form -->
-                <form action="{{ route('menu.update', $menu->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nama Menu</label>
-                        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $menu->name) }}" required>
-                    </div>
+            <!-- Deskripsi -->
+            <div>
+                <label class="block text-sm font-medium text-[#4e342e] mb-2">Deskripsi</label>
+                <input type="text" name="description" value="{{ old('description', $menu->description) }}" required
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8]">
+            </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Deskripsi Menu</label>
-                        <input type="text" name="description" id="description" class="form-control" value="{{ old('description', $menu->description) }}" required>
-                    </div>
+            <!-- Kategori -->
+            <div>
+                <label class="block text-sm font-medium text-[#4e342e] mb-2">Kategori</label>
+                <select name="category_id" class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8]">
+                    @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ $menu->category_id == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
 
-                    <div class="mb-3">
-                        <label for="category_id" class="form-label">Kategori</label>
-                        <select name="category_id" id="category_id" class="form-select" required>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->id }}" {{ $menu->category_id == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+            <!-- Harga & Status -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#4e342e] mb-2">Harga</label>
+                    <input type="number" name="price" value="{{ old('price', $menu->price) }}" required
+                        class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8]">
+                </div>
 
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Harga</label>
-                        <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $menu->price) }}" required>
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#4e342e] mb-2">Status</label>
+                    <select name="status" class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8]">
+                        <option value="active" {{ $menu->status == 'active' ? 'selected' : '' }}>Aktif</option>
+                        <option value="inactive" {{ $menu->status == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+                </div>
+            </div>
 
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status</label>
-                        <select name="status" id="status" class="form-select" required>
-                            <option value="active" {{ $menu->status == 'active' ? 'selected' : '' }}>Aktif</option>
-                            <option value="inactive" {{ $menu->status == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
-                        </select>
-                    </div>
+            <!-- Foto -->
+            <div class="border-t border-[#d7ccc8] pt-6">
+                <label class="block text-sm font-medium text-[#4e342e] mb-4">Foto Menu</label>
 
-                    <div class="mb-3">
-                        <label class="form-label">Foto Menu Saat Ini</label><br>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div>
                         @if ($menu->image)
-                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" width="150"><br>
+                        <img src="{{ asset('storage/' . $menu->image) }}"
+                            class="w-40 rounded-xl border shadow">
                         @else
-                            <em>Tidak ada gambar</em><br>
+                        <div class="w-40 h-28 flex items-center justify-center border-2 border-dashed rounded-xl text-sm text-[#8d6e63]">
+                            Tidak ada gambar
+                        </div>
                         @endif
                     </div>
 
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Ganti Foto Menu</label>
-                        <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                    <div class="flex-1">
+                        <input type="file" name="image"
+                            class="block w-full text-sm
+                               file:mr-4 file:py-2 file:px-4
+                               file:rounded-lg file:border-0
+                               file:bg-[#6d4c41] file:text-white
+                               hover:file:bg-[#5d4037]">
                     </div>
-
-                    <h3 class="mb-3">Bahan</h3>
-                    <div id="ingredient-list">
-                        @foreach($menuIngredients as $index => $ingredient)
-                            <div class="ingredient-item">
-                                <select name="ingredients[{{ $index }}][ingredient_id]" class="form-select">
-                                    @foreach($allIngredients as $ing)
-                                        <option value="{{ $ing->id }}" {{ $ing->id == $ingredient->ingredient_id ? 'selected' : '' }}>
-                                            {{ $ing->name }} ({{ $ing->unit }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <input type="number" name="ingredients[{{ $index }}][quantity]" class="form-control" value="{{ $ingredient->quantity }}" min="1" required>
-                                <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">🗑</button>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <button type="button" class="btn btn-secondary" onclick="addIngredient()">+ Tambah Bahan</button><br><br>
-                    <button type="submit" class="btn btn-primary w-100">Update Menu</button>
-                </form>
+                </div>
             </div>
-        </div>
 
-        <!-- Back Link -->
-        <div class="back-link mt-3">
-            <a href="{{ route('menu.index') }}">← Kembali</a>
+            <!-- Ingredients -->
+            <div class="border-t border-[#d7ccc8] pt-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-[#3e2723]">Bahan Menu</h3>
+                    <button type="button" onclick="addIngredient()"
+                        class="text-sm font-semibold text-[#5d4037] hover:underline">
+                        + Tambah Bahan
+                    </button>
+                </div>
+
+                <div id="ingredient-list" class="space-y-3">
+                    @foreach($menuIngredients as $index => $ingredient)
+                    <div class="grid grid-cols-1 sm:grid-cols-[1fr_120px_48px] gap-3 items-center
+                                bg-[#fffaf5] border border-[#d7ccc8] rounded-2xl p-4">
+                        <select name="ingredients[{{ $index }}][ingredient_id]"
+                            class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
+                            @foreach($allIngredients as $ing)
+                            <option value="{{ $ing->id }}"
+                                {{ $ing->id == $ingredient->ingredient_id ? 'selected' : '' }}>
+                                {{ $ing->name }} ({{ $ing->unit }})
+                            </option>
+                            @endforeach
+                        </select>
+
+                        <input type="number" name="ingredients[{{ $index }}][quantity]"
+                            value="{{ $ingredient->quantity }}" min="1"
+                            class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
+
+                        <button type="button" onclick="removeIngredient(this)"
+                            class="h-12 w-12 rounded-xl bg-red-100 text-red-600
+                                   hover:bg-red-500 hover:text-white transition">
+                            🗑
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-[#5d4037] to-[#6d4c41]
+                   text-white py-4 rounded-xl font-semibold hover:scale-[1.02] transition">
+                Update Menu
+            </button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <a href="{{ route('menu.index') }}" class="text-sm text-[#5d4037] underline">
+                Back to Menu List
+            </a>
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let ingredientIndex = {{ count($menuIngredients) }};
+        let ingredientIndex = {
+            {
+                count($menuIngredients)
+            }
+        };
 
         function addIngredient() {
             const list = document.getElementById('ingredient-list');
-            const newItem = document.createElement('div');
-            newItem.className = 'ingredient-item';
+            const div = document.createElement('div');
 
-            newItem.innerHTML = `
-                <select name="ingredients[${ingredientIndex}][ingredient_id]" class="form-select">
-                    @foreach($allIngredients as $ing)
-                        <option value="{{ $ing->id }}">{{ $ing->name }} ({{ $ing->unit }})</option>
-                    @endforeach
-                </select>
-                <input type="number" name="ingredients[${ingredientIndex}][quantity]" class="form-control" min="1" value="1" required>
-                <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">🗑</button>
-            `;
+            div.className = `
+            grid grid-cols-1 sm:grid-cols-[1fr_120px_48px] gap-3 items-center
+            bg-[#fffaf5] border border-[#d7ccc8] rounded-2xl p-4
+        `;
 
-            list.appendChild(newItem);
+            div.innerHTML = `
+            <select name="ingredients[\${ingredientIndex}][ingredient_id]"
+                class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
+                @foreach($allIngredients as $ing)
+                    <option value="{{ $ing->id }}">{{ $ing->name }} ({{ $ing->unit }})</option>
+                @endforeach
+            </select>
+
+            <input type="number" name="ingredients[\${ingredientIndex}][quantity]"
+                min="1" value="1"
+                class="h-12 px-3 rounded-xl border-2 border-[#d7ccc8]">
+
+            <button type="button" onclick="removeIngredient(this)"
+                class="h-12 w-12 rounded-xl bg-red-100 text-red-600
+                       hover:bg-red-500 hover:text-white transition">
+                🗑
+            </button>
+        `;
+
+            list.appendChild(div);
             ingredientIndex++;
         }
 
-        function removeIngredient(button) {
-            button.parentElement.remove();
+        function removeIngredient(btn) {
+            btn.parentElement.remove();
         }
     </script>
+
 </body>
+
 </html>
