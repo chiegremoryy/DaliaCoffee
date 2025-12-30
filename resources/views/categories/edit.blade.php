@@ -4,74 +4,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Category</title>
+    <title>Edit Category | Dalia Coffee</title>
 
-    <!-- Link to Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
     <style>
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        body {
+            font-family: 'Poppins', sans-serif;
         }
 
-        .form-container h1 {
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 20px;
+        .title-font {
+            font-family: 'Poppins', sans-serif;
         }
 
-        .form-group label {
-            font-weight: 600;
+        .glass-effect {
+            background: rgba(255, 248, 240, 0.95);
+            backdrop-filter: blur(10px);
         }
 
-        .btn-primary {
-            width: 100%;
-        }
-
-        .back-link a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
+        .coffee-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234e342e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8d6e63] via-[#a1887f] to-[#bcaaa4] coffee-pattern p-6">
 
-    <div class="container mt-5">
-        <!-- Form Container -->
-        <div class="form-container">
-            <h1>Edit Category</h1>
+    <div class="w-full max-w-xl glass-effect rounded-3xl shadow-2xl p-8 sm:p-12">
 
-            <!-- Edit Category Form -->
-            <form action="{{ route('categories.update', $category->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="mb-3">
-                    <label for="name" class="form-label">Category Name</label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ $category->name }}" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Category</button>
-            </form>
-
-            <!-- Back Link -->
-            <div class="back-link mt-3 text-center">
-                <a href="{{ route('categories.index') }}">← Back to Categories List</a>
-            </div>
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="title-font text-3xl md:text-4xl text-[#3e2723] mb-2">
+                Edit Category
+            </h1>
+            <p class="text-[#6d4c41] text-sm">
+                Update your category information
+            </p>
         </div>
-    </div>
 
-    <!-- Bootstrap 5 JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Form -->
+        <form action="{{ route('categories.update', $category->id) }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            <div>
+                <label for="name"
+                    class="block text-sm font-medium text-[#4e342e] uppercase tracking-wide mb-2">
+                    Category Name
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ $category->name }}"
+                    required
+                    placeholder="e.g. Signature Coffee"
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           placeholder-[#a1887f] focus:outline-none focus:border-[#6d4c41]
+                           focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-[#5d4037] to-[#6d4c41]
+                       text-white font-semibold py-4 rounded-xl
+                       hover:from-[#4e342e] hover:to-[#5d4037]
+                       transform hover:scale-[1.02]
+                       transition-all duration-300 shadow-lg hover:shadow-xl">
+                Update Category
+            </button>
+        </form>
+
+        <!-- Back Link -->
+        <div class="mt-6 text-center">
+            <a href="{{ route('categories.index') }}"
+               class="text-sm font-semibold text-[#5d4037]
+                      hover:text-[#4e342e]
+                      underline decoration-2 underline-offset-4">
+                Back to Categories List
+            </a>
+        </div>
+
+    </div>
 
 </body>
 
