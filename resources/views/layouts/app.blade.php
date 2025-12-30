@@ -1,193 +1,143 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <title>{{ ucfirst(Auth::user()->role) }} Panel | Dalia Coffee</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts -->
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #d7ccc8, #a1887f);
-            margin: 0;
-        }
-
-        .sidebar {
-            width: 260px;
-            min-height: 100vh;
-            background-color: #4e342e;
-            padding: 30px 20px;
-            color: #fff8f0;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar h4 {
-            font-weight: 600;
-            color: #fff8f0;
-        }
-
-        .nav-link {
-            transition: all 0.2s ease;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: #fff8f0;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-link i {
-            font-size: 1rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .nav-link:hover {
-            background-color: #6d4c41;
-        }
-
-        .nav-link.active {
-            background-color: #fff8f0;
-            color: #4e342e !important;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            position: absolute;
-            bottom: 30px;
-            left: 20px;
-            right: 20px;
-        }
-
-        .logout-btn button {
-            background-color: transparent;
-            border: 2px solid #fff8f0;
-            color: #fff8f0;
-            font-weight: 500;
-        }
-
-        .logout-btn button:hover {
-            background-color: #fff8f0;
-            color: #4e342e;
-        }
-
-        .main-content {
-            background-color: #fff8f0;
-            padding: 40px;
-            flex-grow: 1;
-            min-height: 100vh;
-        }
-
-        .nav .nav-item {
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-                box-shadow: none;
-            }
-
-            .logout-btn {
-                position: relative;
-                bottom: auto;
-                left: auto;
-                right: auto;
-                margin-top: 20px;
-            }
-        }
+        body { font-family: 'Poppins', sans-serif; }
     </style>
 </head>
 
-<body>
-    <div class="d-flex flex-wrap">
-        <!-- Sidebar -->
-        <aside class="sidebar position-relative">
-            <!-- LOGO -->
-            <div class="text-center mb-2">
-                <img src="{{ asset('images/dalia-coffee2.png') }}" alt="Logo Dalia Coffee" style="max-width: 200px;">
-            </div>
+<body class="min-h-screen bg-gradient-to-br from-[#8d6e63] via-[#a1887f] to-[#bcaaa4]">
 
-            <h4 class="mb-4">{{ ucfirst(Auth::user()->role) }} Dashboard</h4>
-            <hr class="text-light mb-4">
+<div x-data="{ open: false }" class="flex min-h-screen">
 
-            <!-- Menu berdasarkan role -->
-            <ul class="nav flex-column">
-                @if(Auth::user()->role === 'owner')
-                    <li class="nav-item">
-                        <a href="{{ route('karyawan.index') }}" class="nav-link {{ Route::is('karyawan.index') ? 'active' : '' }}">
-                            <i class="fas fa-users"></i> Karyawan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('categories.index') }}" class="nav-link {{ Route::is('categories.index') ? 'active' : '' }}">
-                            <i class="fas fa-folder-open"></i> Kategori
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('menu.index') }}" class="nav-link {{ Route::is('menu.index') ? 'active' : '' }}">
-                            <i class="fas fa-utensils"></i> Menu
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('ingredients.index') }}" class="nav-link {{ Route::is('ingredients.index') ? 'active' : '' }}">
-                            <i class="fas fa-leaf"></i> Bahan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('stocks.index') }}" class="nav-link {{ Route::is('stocks.index') ? 'active' : '' }}">
-                            <i class="fas fa-boxes-stacked"></i> Stok Bahan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('orders.report') }}" class="nav-link {{ Route::is('orders.report') ? 'active' : '' }}">
-                            <i class="fas fa-chart-line"></i> Laporan
-                        </a>
-                    </li>
-                @elseif(Auth::user()->role === 'kasir')
-                    <li class="nav-item">
-                        <a href="{{ route('orders.index') }}" class="nav-link {{ Route::is('orders.index') ? 'active' : '' }}">
-                            <i class="fas fa-cash-register"></i> Transaksi
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('orders.report') }}" class="nav-link {{ Route::is('orders.report') ? 'active' : '' }}">
-                            <i class="fas fa-chart-line"></i> Laporan
-                        </a>
-                    </li>
-                @endif
-            </ul>
+    <!-- OVERLAY MOBILE -->
+    <div x-show="open"
+         @click="open=false"
+         class="fixed inset-0 bg-black/40 z-40 lg:hidden"></div>
 
-            <!-- Logout -->
-            <div class="logout-btn">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn w-100">Logout</button>
-                </form>
-            </div>
-        </aside>
+    <!-- SIDEBAR -->
+    <aside
+        :class="open ? 'translate-x-0' : '-translate-x-full'"
+        class="fixed lg:static z-50
+               w-64 min-h-screen
+               bg-[#4e342e] text-[#fff8f0]
+               px-6 py-8 shadow-xl
+               transition-transform duration-300
+               lg:translate-x-0">
 
-        <!-- Main Content -->
-        <main class="main-content">
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            <img src="{{ asset('images/dalia-coffee2.png') }}"
+                 class="mx-auto max-w-[150px]" alt="Dalia Coffee">
+        </div>
+
+        <h2 class="text-lg font-semibold mb-6 text-center">
+            {{ ucfirst(Auth::user()->role) }} Dashboard
+        </h2>
+
+        <!-- MENU -->
+        <nav class="flex-1 space-y-2">
+
+            @if(Auth::user()->role === 'owner')
+
+            <a href="{{ route('karyawan.index') }}"
+               class="sidebar-link {{ Route::is('karyawan.*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>Karyawan</span>
+            </a>
+
+            <a href="{{ route('categories.index') }}"
+               class="sidebar-link {{ Route::is('categories.*') ? 'active' : '' }}">
+                <i class="fas fa-folder-open"></i>
+                <span>Kategori</span>
+            </a>
+
+            <a href="{{ route('menu.index') }}" class="sidebar-link">
+                <i class="fas fa-utensils"></i>
+                <span>Menu</span>
+            </a>
+
+            <a href="{{ route('ingredients.index') }}" class="sidebar-link">
+                <i class="fas fa-leaf"></i>
+                <span>Bahan</span>
+            </a>
+
+            <a href="{{ route('stocks.index') }}" class="sidebar-link">
+                <i class="fas fa-boxes-stacked"></i>
+                <span>Stok</span>
+            </a>
+
+            <a href="{{ route('orders.report') }}" class="sidebar-link">
+                <i class="fas fa-chart-line"></i>
+                <span>Laporan</span>
+            </a>
+
+            @endif
+        </nav>
+
+        <!-- LOGOUT -->
+        <form action="{{ route('logout') }}" method="POST" class="mt-6">
+            @csrf
+            <button
+                class="w-full py-2 rounded-lg border border-[#fff8f0]
+                       hover:bg-[#fff8f0] hover:text-[#4e342e]
+                       transition font-semibold">
+                Logout
+            </button>
+        </form>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 w-full">
+
+        <!-- TOPBAR MOBILE -->
+        <div class="lg:hidden flex items-center justify-between p-4 bg-[#4e342e] text-white">
+            <button @click="open=true">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <span class="font-semibold">Dalia Coffee</span>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="p-4 sm:p-6 lg:p-10">
             @yield('content')
-        </main>
-    </div>
+        </div>
+    </main>
 
-    @stack('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+<style>
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all .2s ease;
+}
+.sidebar-link:hover { background-color: #6d4c41; }
+.sidebar-link.active {
+    background-color: #fff8f0;
+    color: #4e342e;
+    font-weight: 600;
+}
+</style>
+
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+@stack('scripts')
 </body>
-
 </html>
