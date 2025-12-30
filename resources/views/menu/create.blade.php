@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="id">
 
@@ -179,9 +180,29 @@
                       underline decoration-2 underline-offset-4">
                 Back to Menu List
             </a>
+=======
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Tambah Menu Baru</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                @include('menu._form', ['menu' => null, 'menuIngredients' => []])
+
+                <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+                <a href="{{ route('menu.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+            </form>
+>>>>>>> ecee0864c8195647650ba18b1d923e7973cc7118
         </div>
 
     </div>
+<<<<<<< HEAD
 
     <!-- JS (logic tetap) -->
     <script>
@@ -226,3 +247,7 @@
 
 </body>
 </html>
+=======
+</div>
+@endsection
+>>>>>>> ecee0864c8195647650ba18b1d923e7973cc7118

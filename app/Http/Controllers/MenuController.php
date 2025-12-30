@@ -11,33 +11,43 @@ use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
+    /**
+     * Tampilkan katalog menu ke publik.
+     */
     public function katalog()
     {
         $menus = Menu::where('status', 'active')->with('category')->get();
         return view('katalog', compact('menus'));
     }
-    public function index(Request $request)
+
+    /**
+     * Halaman utama daftar menu (admin).
+     */
+    public function index()
     {
         $menus = Menu::with('category', 'menuIngredients.ingredient')->get();
-        return view('menu.index', compact('menus'));
+        $categories = Category::all();
+        $allIngredients = ingredients::all();
+
+        return view('menu.index', compact('menus', 'categories', 'allIngredients'));
     }
 
     /**
-     * Form tambah menu baru.
+     * Tampilkan form tambah menu.
      */
     public function create()
     {
         $categories = Category::all();
-        $allIngredients =  ingredients::all();
+        $allIngredients = ingredients::all();
         return view('menu.create', compact('categories', 'allIngredients'));
     }
 
     /**
-     * Simpan menu baru ke database.
+     * Simpan menu baru.
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
@@ -45,21 +55,14 @@ class MenuController extends Controller
             'status' => 'required|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'ingredients.*.ingredient_id' => 'required|exists:ingredients,id',
-            'ingredients.*.quantity' => 'required|numeric|min:1',
+            'ingredients.*.quantity' => 'required|numeric|min:0.1',
         ]);
 
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('menu_images', 'public')
-            : null;
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('menu_images', 'public');
+        }
 
-        $menu = Menu::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'status' => $request->status,
-            'image' => $imagePath,
-        ]);
+        $menu = Menu::create($validated);
 
         foreach ($request->ingredients as $ingredient) {
             menu_ingredient::create([
@@ -72,35 +75,33 @@ class MenuController extends Controller
         return redirect()->route('menu.index')->with('success', 'Menu berhasil ditambahkan.');
     }
 
-
     /**
-     * Tampilkan detail 1 menu.
+     * Tampilkan detail satu menu.
      */
     public function show(Menu $menu)
     {
         $menu->load('category', 'menuIngredients.ingredient');
-
         return view('menu.show', compact('menu'));
     }
 
     /**
-     * Form edit menu.
+     * Tampilkan form edit menu.
      */
     public function edit(Menu $menu)
     {
         $categories = Category::all();
-        $allIngredients = ingredients::all(); // Semua bahan tersedia
-        $menuIngredients = $menu->menuIngredients()->with('ingredient')->get(); // Bahan yang sudah ditambahkan ke menu ini
+        $allIngredients = ingredients::all();
+        $menuIngredients = $menu->menuIngredients()->with('ingredient')->get();
 
         return view('menu.edit', compact('menu', 'categories', 'allIngredients', 'menuIngredients'));
     }
 
     /**
-     * Update data menu.
+     * Perbarui menu.
      */
     public function update(Request $request, Menu $menu)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
@@ -108,30 +109,21 @@ class MenuController extends Controller
             'status' => 'required|in:active,inactive',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'ingredients.*.ingredient_id' => 'required|exists:ingredients,id',
-            'ingredients.*.quantity' => 'required|numeric|min:1',
+            'ingredients.*.quantity' => 'required|numeric|min:0.1',
         ]);
 
-        // Handle image upload
+        // Handle update image
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($menu->image && Storage::disk('public')->exists($menu->image)) {
                 Storage::disk('public')->delete($menu->image);
             }
-
-            $menu->image = $request->file('image')->store('menu_images', 'public');
+            $validated['image'] = $request->file('image')->store('menu_images', 'public');
         }
 
-        $menu->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'status' => $request->status,
-            'image' => $menu->image,
-        ]);
+        $menu->update($validated);
 
+        // Update ingredients
         $menu->menuIngredients()->delete();
-
         foreach ($request->ingredients as $ingredient) {
             menu_ingredient::create([
                 'menu_id' => $menu->id,
@@ -140,7 +132,7 @@ class MenuController extends Controller
             ]);
         }
 
-        return redirect()->route('menu.index')->with('success', 'Menu berhasil diupdate.');
+        return redirect()->route('menu.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
     /**
@@ -148,7 +140,14 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
+        // Hapus gambar jika ada
+        if ($menu->image && Storage::disk('public')->exists($menu->image)) {
+            Storage::disk('public')->delete($menu->image);
+        }
+
+        $menu->menuIngredients()->delete();
         $menu->delete();
+
         return redirect()->route('menu.index')->with('success', 'Menu berhasil dihapus.');
     }
 }
