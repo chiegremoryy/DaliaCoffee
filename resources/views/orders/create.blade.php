@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Order Baru | Dalia Coffee</title>
+    <title>Buat Pesanan | Dalia Coffee</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,8 +34,8 @@
 
         <!-- Header -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-semibold text-[#3e2723] mb-2">Formulir Order Baru</h1>
-            <p class="text-sm text-[#6d4c41]">Tambahkan order baru dan pilih menu beserta jumlahnya</p>
+            <h1 class="text-3xl md:text-4xl font-semibold text-[#3e2723] mb-2">Buat Pesanan</h1>
+            <p class="text-sm text-[#6d4c41]">Pilih menu dan jumlah untuk menambahkan pesanan.</p>
         </div>
 
         <!-- Form Order -->
@@ -62,9 +62,9 @@
                         class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
                                focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
                         @foreach($menus as $menu)
-                            <option value="{{ $menu->id }}">
-                                {{ $menu->name }} (Rp{{ number_format($menu->price) }})
-                            </option>
+                        <option value="{{ $menu->id }}">
+                            {{ $menu->name }} (Rp{{ number_format($menu->price) }})
+                        </option>
                         @endforeach
                     </select>
 
@@ -73,8 +73,8 @@
                                focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
 
                     <button type="button" onclick="removeItem(this)"
-                        class="h-14 px-5 rounded-xl bg-red-100 text-red-600 font-semibold hover:bg-red-200 transition-all">
-                        🗑
+                        class="h-14 px-5 rounded-xl bg-red-100 text-red-600 hover:bg-red-200 transition-all flex items-center justify-center">
+                        <i data-lucide="trash-2"></i>
                     </button>
                 </div>
             </div>
@@ -82,8 +82,9 @@
             <!-- Add Item Button -->
             <button type="button" onclick="addItem()"
                 class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#efebe9] text-[#4e342e]
-                       font-semibold hover:bg-[#e0d6d1] transition-all">
-                + Tambah Item
+                       font-semibold hover:bg-[#e0d6d1] transition-all flex items-center gap-2">
+                <i data-lucide="plus"></i>
+                Tambah Item
             </button>
 
             <!-- Submit Button -->
@@ -98,9 +99,59 @@
         <!-- Back Button -->
         <div class="mt-6 text-center">
             <a href="{{ route('orders.index') }}"
-               class="text-sm font-semibold text-[#5d4037] hover:text-[#4e342e] underline decoration-2 underline-offset-4">
+                class="text-sm font-semibold text-[#5d4037] hover:text-[#4e342e] underline decoration-2 underline-offset-4">
                 Kembali ke Riwayat Transaksi
             </a>
         </div>
 
     </div>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Script -->
+    <script>
+        let itemIndex = 1;
+
+        function addItem() {
+            const orderItems = document.getElementById('order-items');
+
+            const newItem = document.createElement('div');
+            newItem.className = 'order-item flex flex-col sm:flex-row gap-3 items-center';
+
+            newItem.innerHTML = `
+                <select name="items[${itemIndex}][menu_id]" required
+                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+                    @foreach($menus as $menu)
+                        <option value="{{ $menu->id }}">
+                            {{ $menu->name }} (Rp{{ number_format($menu->price) }})
+                        </option>
+                    @endforeach
+                </select>
+
+                <input type="number" name="items[${itemIndex}][quantity]" placeholder="Jumlah" min="1" required
+                    class="w-full sm:w-32 h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
+                           focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
+
+                <button type="button" onclick="removeItem(this)"
+                    class="h-14 px-5 rounded-xl bg-red-100 text-red-600 hover:bg-red-200 transition-all flex items-center justify-center">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            `;
+
+            orderItems.appendChild(newItem);
+            lucide.createIcons();
+            itemIndex++;
+        }
+
+        function removeItem(button) {
+            button.closest('.order-item').remove();
+        }
+
+        lucide.createIcons();
+    </script>
+
+</body>
+
+</html>

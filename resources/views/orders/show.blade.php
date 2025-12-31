@@ -37,9 +37,26 @@
             <h1 class="text-3xl md:text-4xl font-semibold text-[#3e2723] mb-2">
                 Detail Order: {{ $order->invoice_code }}
             </h1>
-            <p class="text-sm text-[#6d4c41]">
-                Tanggal Order: {{ $order->order_date->format('d M Y') }}
-            </p>
+        </div>
+
+        <!-- Info Order -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-4 border">
+                <p class="text-xs text-[#6d4c41]">Tanggal Order</p>
+                <p class="font-semibold text-[#3e2723]">
+                    {{ $order->order_date->format('d M Y') }}
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 border">
+                <p class="text-xs text-[#6d4c41]">Metode Pembayaran</p>
+                <p class="font-semibold">
+                    <span class="inline-block px-3 py-1 rounded-full text-xs
+                        bg-[#d7ccc8] text-[#4e342e]">
+                        {{ $order->payment_method ?? '-' }}
+                    </span>
+                </p>
+            </div>
         </div>
 
         <!-- Desktop Table -->
@@ -55,18 +72,24 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-[#d7ccc8] text-[#3e2723]">
                     @foreach($order->orderItems as $item)
-                        <tr>
-                            <td class="px-4 py-3">{{ $item->menu->name }}</td>
-                            <td class="px-4 py-3">{{ $item->quantity }}</td>
-                            <td class="px-4 py-3">Rp{{ number_format($item->price_per_item,0,',','.') }}</td>
-                            <td class="px-4 py-3">Rp{{ number_format($item->subtotal,0,',','.') }}</td>
-                        </tr>
+                    <tr>
+                        <td class="px-4 py-3">{{ $item->menu->name }}</td>
+                        <td class="px-4 py-3">{{ $item->quantity }}</td>
+                        <td class="px-4 py-3">
+                            Rp{{ number_format($item->price_per_item,0,',','.') }}
+                        </td>
+                        <td class="px-4 py-3">
+                            Rp{{ number_format($item->subtotal,0,',','.') }}
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
                 <tfoot class="bg-[#efebe9] text-[#3e2723] font-semibold text-sm">
                     <tr>
                         <td colspan="3" class="px-4 py-3 text-right">Total</td>
-                        <td class="px-4 py-3">Rp{{ number_format($order->total_amount,0,',','.') }}</td>
+                        <td class="px-4 py-3">
+                            Rp{{ number_format($order->total_amount,0,',','.') }}
+                        </td>
                     </tr>
                 </tfoot>
             </table>
@@ -76,10 +99,18 @@
         <div class="sm:hidden space-y-4">
             @foreach($order->orderItems as $item)
             <div class="bg-white rounded-xl border p-4 shadow-sm">
-                <div class="font-semibold text-[#3e2723]">{{ $item->menu->name }}</div>
-                <div class="text-sm text-[#6d4c41] mt-1">Jumlah: {{ $item->quantity }}</div>
-                <div class="text-sm mt-1">Harga: Rp{{ number_format($item->price_per_item,0,',','.') }}</div>
-                <div class="text-sm mt-1">Subtotal: Rp{{ number_format($item->subtotal,0,',','.') }}</div>
+                <div class="font-semibold text-[#3e2723]">
+                    {{ $item->menu->name }}
+                </div>
+                <div class="text-sm text-[#6d4c41] mt-1">
+                    Jumlah: {{ $item->quantity }}
+                </div>
+                <div class="text-sm mt-1">
+                    Harga: Rp{{ number_format($item->price_per_item,0,',','.') }}
+                </div>
+                <div class="text-sm mt-1 font-semibold">
+                    Subtotal: Rp{{ number_format($item->subtotal,0,',','.') }}
+                </div>
             </div>
             @endforeach
 
@@ -90,11 +121,11 @@
         </div>
 
         <!-- Back Button -->
-        <div class="mt-6 text-center">
+        <div class="mt-8 text-center">
             <a href="{{ route('orders.index') }}"
-               class="inline-block px-6 py-3 bg-[#efebe9] text-[#4e342e] font-semibold rounded-xl
+                class="inline-block px-6 py-3 bg-[#efebe9] text-[#4e342e] font-semibold rounded-xl
                       hover:bg-[#e0d6d1] transition-all">
-                Back to Orders List
+                Back
             </a>
         </div>
 
