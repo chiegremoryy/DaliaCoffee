@@ -102,7 +102,7 @@
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300">
                         <iconify-icon icon="solar:widget-5-linear" width="18"></iconify-icon>
-                        <span>Ke Dashboard</span>
+                        <span>Dashboard</span>
                     </a>
                 @else
                     <a href="{{ route('login') }}"
@@ -209,7 +209,8 @@
                     </div>
                 @else
                     <!-- Empty State for Empty Category -->
-                    <div class="text-center py-10 bg-slate-50/50 border border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center">
+                    <div
+                        class="text-center py-10 bg-slate-50/50 border border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center">
                         <iconify-icon icon="solar:tea-cup-broken-linear" width="32" class="text-primary/30 mb-2"></iconify-icon>
                         <p class="text-xs text-slate-400 font-light">Belum ada menu yang tersedia untuk kategori ini.</p>
                     </div>
@@ -265,12 +266,13 @@
                                 class="text-primary"></iconify-icon>
                             <div>
                                 <p class="font-medium text-dark">Senin - Minggu</p>
-                                <p class="text-xs text-slate-400">09:00 - 22:00 WIB</p>
+                                <p class="text-xs text-slate-400">18:00 - 24:00 WIB</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
                             <iconify-icon icon="solar:map-point-linear" width="18" class="text-primary"></iconify-icon>
-                            <p class="leading-relaxed">Jl. Raya Kopi No. 45, Blok A, Kota Bogor</p>
+                            <p class="leading-relaxed">Jl. Raya Tayu - Pati, Pakis Karanganyar, Kec. Tayu, Kabupaten
+                                Pati, Jawa Tengah 59155</p>
                         </div>
                     </div>
                 </div>

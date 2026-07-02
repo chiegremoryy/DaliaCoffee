@@ -26,7 +26,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::with('category', 'menuIngredients.ingredient')->get();
+        $menus = Menu::with('category', 'menuIngredients.ingredient')->paginate(10);
         $categories = Category::all();
         $allIngredients = ingredients::all();
 
