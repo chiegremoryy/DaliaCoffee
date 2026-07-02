@@ -30,5 +30,11 @@ class DatabaseSeeder extends Seeder
                 'role' => 'kasir',
             ]
         );
+
+        $this->call([
+            CategorySeeder::class,
+            IngredientSeeder::class,
+            StockHistorySeeder::class,
+        ]);
     }
 }

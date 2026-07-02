@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Menu;
 use App\Models\Category;
 
-class ImportMenuPdfSeeder extends Seeder
+class MenuSeeder extends Seeder
 {
     /**
      * Run the database seeds.
