@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             IngredientSeeder::class,
             StockHistorySeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }
