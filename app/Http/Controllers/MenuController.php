@@ -17,7 +17,8 @@ class MenuController extends Controller
     public function katalog()
     {
         $menus = Menu::where('status', 'active')->with('category')->get();
-        return view('katalog', compact('menus'));
+        $categories = Category::orderBy('id')->get();
+        return view('katalog', compact('menus', 'categories'));
     }
 
     /**

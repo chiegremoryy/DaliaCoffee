@@ -115,7 +115,7 @@ class OrderController extends Controller
         if ($order->payment_method === 'qris') {
             $payload = [
                 "qrisCode" => "00020101021126760024ID.CO.SPEEDCASH.MERCHANT01189360081530001471020215ID10240014710270303UKE51440014ID.CO.QRIS.WWW0215ID10243551171010303UKE5204481653033605802ID5912NR CREATIONZ6008SEMARANG61055018962410509S244071850117202506172030177620703A016304354A",
-                "nominal" => (string)$order->total_amount,
+                "nominal" => (string) $order->total_amount,
                 "feeType" => "r",
                 "fee" => "0",
                 "includeFee" => false

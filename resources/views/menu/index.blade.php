@@ -3,82 +3,91 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-<div class="max-w-6xl mx-auto bg-[#fff8f0] rounded-3xl shadow-xl p-6 sm:p-8">
+<div class="bg-white rounded-2xl border border-slate-100 shadow-[0_2px_20px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8">
 
     <!-- HEADER -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <div>
-            <h2 class="text-2xl sm:text-3xl font-semibold text-[#3e2723]">
-                Menu
+            <h2 class="text-2xl sm:text-3xl font-semibold text-dark font-poppins">
+                Data Menu
             </h2>
-            <p class="text-sm text-[#6d4c41]">
-                Kelola data menu
+            <p class="text-sm text-slate-400 mt-1">
+                Kelola data makanan, minuman, dan menu lainnya
             </p>
         </div>
 
         <a href="{{ route('menu.create') }}"
-           class="mt-4 sm:mt-0 inline-flex items-center gap-2
-                  bg-[#5d4037] text-white font-semibold
-                  px-5 py-3 rounded-xl hover:bg-[#4e342e] transition">
-            <i class="fas fa-plus"></i>
+           class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-200">
+            <iconify-icon icon="solar:tea-cup-linear" width="20"></iconify-icon>
             Tambah Menu
         </a>
     </div>
 
-    <!-- ALERT -->
+    <!-- ALERT SUCCESS -->
     @if(session('success'))
-        <div class="mb-4 bg-green-100 text-green-800 px-4 py-3 rounded-xl">
-            <i class="fas fa-check-circle me-1"></i>
-            {{ session('success') }}
+        <div class="mb-6 bg-emerald-50 text-emerald-800 border border-emerald-100 px-4 py-3 rounded-xl flex items-center gap-2">
+            <iconify-icon icon="solar:check-circle-linear" class="text-emerald-600" width="20"></iconify-icon>
+            <span>{{ session('success') }}</span>
         </div>
     @endif
 
     <!-- DESKTOP TABLE -->
-    <div class="hidden sm:block overflow-x-auto rounded-2xl border border-[#d7ccc8]">
+    <div class="hidden sm:block overflow-hidden rounded-2xl border border-slate-100">
         <table class="min-w-full text-sm">
-            <thead class="bg-[#efebe9] text-[#4e342e] uppercase text-xs">
+            <thead class="bg-slate-50/50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-400 font-semibold">
                 <tr>
                     <th class="px-6 py-4 text-center w-16">#</th>
-                    <th class="px-6 py-4">Nama</th>
-                    <th class="px-6 py-4">Kategori</th>
-                    <th class="px-6 py-4">Harga</th>
+                    <th class="px-6 py-4 text-left">Nama</th>
+                    <th class="px-6 py-4 text-left">Kategori</th>
+                    <th class="px-6 py-4 text-right">Harga</th>
                     <th class="px-6 py-4 text-center">Status</th>
                     <th class="px-6 py-4 text-center w-32">Aksi</th>
                 </tr>
             </thead>
 
-            <tbody class="bg-white divide-y divide-[#d7ccc8]">
+            <tbody class="divide-y divide-slate-100">
                 @forelse ($menus as $menu)
-                <tr>
-                    <td class="px-6 py-4 text-center">{{ $loop->iteration }}</td>
-                    <td class="px-6 py-4 font-medium">{{ $menu->name }}</td>
-                    <td class="px-6 py-4">{{ $menu->category->name ?? '-' }}</td>
+                <tr class="group hover:bg-slate-50/80 transition-colors border-b border-slate-50 last:border-0">
+                    <td class="px-6 py-4 text-center font-medium text-slate-400">{{ $loop->iteration }}</td>
                     <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            @if($menu->image)
+                                <img src="{{ asset('storage/' . $menu->image) }}" class="w-10 h-10 object-cover rounded-xl" alt="{{ $menu->name }}">
+                            @else
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
+                                    <iconify-icon icon="solar:gallery-linear" width="20"></iconify-icon>
+                                </div>
+                            @endif
+                            <span class="font-semibold text-dark">{{ $menu->name }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-slate-600">{{ $menu->category->name ?? '-' }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right font-medium text-dark">
                         Rp{{ number_format($menu->price, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
                             {{ $menu->status === 'active'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-gray-200 text-gray-600' }}">
-                            {{ ucfirst($menu->status) }}
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                            {{ $menu->status === 'active' ? 'Aktif' : 'Nonaktif' }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex justify-center gap-3">
-                            <a href="{{ route('menu.edit', $menu->id) }}" class="btn-edit">
-                                <i class="fas fa-edit"></i>
+                            <a href="{{ route('menu.edit', $menu->id) }}"
+                               class="btn-edit-premium">
+                                <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
                             </a>
 
                             <form action="{{ route('menu.destroy', $menu->id) }}"
                                   method="POST" class="form-delete">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn-delete">
-                                    <i class="fas fa-trash"></i>
+                                <button class="btn-delete-premium">
+                                    <iconify-icon icon="solar:trash-bin-trash-linear" width="18"></iconify-icon>
                                 </button>
                             </form>
                         </div>
@@ -86,7 +95,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                    <td colspan="6" class="px-6 py-8 text-center text-slate-400 font-medium">
                         Belum ada menu tersedia
                     </td>
                 </tr>
@@ -97,66 +106,86 @@
 
     <!-- MOBILE CARD -->
     <div class="sm:hidden space-y-4">
-        @foreach ($menus as $menu)
-        <div class="bg-white rounded-xl border p-4 shadow-sm">
-            <div class="font-semibold text-[#3e2723]">
-                {{ $menu->name }}
-            </div>
-            <div class="text-sm text-[#6d4c41]">
-                {{ $menu->category->name ?? '-' }}
-            </div>
-            <div class="text-sm mt-1">
-                Rp{{ number_format($menu->price, 0, ',', '.') }}
+        @forelse ($menus as $menu)
+        <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-sm">
+            <div class="flex items-center gap-3">
+                @if($menu->image)
+                    <img src="{{ asset('storage/' . $menu->image) }}" class="w-12 h-12 object-cover rounded-xl" alt="{{ $menu->name }}">
+                @else
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
+                        <iconify-icon icon="solar:gallery-linear" width="20"></iconify-icon>
+                    </div>
+                @endif
+                <div class="flex-1">
+                    <div class="font-semibold text-dark">{{ $menu->name }}</div>
+                    <div class="text-xs text-slate-400">{{ $menu->category->name ?? '-' }}</div>
+                    <div class="text-sm font-semibold text-primary mt-1">Rp{{ number_format($menu->price, 0, ',', '.') }}</div>
+                </div>
+                <div>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold
+                        {{ $menu->status === 'active'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                            : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                        {{ $menu->status === 'active' ? 'Aktif' : 'Nonaktif' }}
+                    </span>
+                </div>
             </div>
 
-            <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold
-                {{ $menu->status === 'active'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-200 text-gray-600' }}">
-                {{ ucfirst($menu->status) }}
-            </span>
-
-            <div class="flex justify-end gap-3 mt-4">
-                <a href="{{ route('menu.edit', $menu->id) }}" class="btn-edit">
-                    <i class="fas fa-edit"></i>
+            <div class="flex justify-end gap-3 mt-4 border-t border-slate-50 pt-3">
+                <a href="{{ route('menu.edit', $menu->id) }}" class="btn-edit-premium">
+                    <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
                 </a>
 
                 <form action="{{ route('menu.destroy', $menu->id) }}"
                       method="POST" class="form-delete">
                     @csrf
                     @method('DELETE')
-                    <button class="btn-delete">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn-delete-premium">
+                        <iconify-icon icon="solar:trash-bin-trash-linear" width="18"></iconify-icon>
                     </button>
                 </form>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div class="text-center text-slate-400 py-8">
+            Belum ada menu tersedia
+        </div>
+        @endforelse
     </div>
 
 </div>
 
 <!-- STYLE -->
 <style>
-.btn-edit {
+.btn-edit-premium {
     width: 36px;
     height: 36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:8px;
-    background:#ffcc80;
-    color:#5d4037;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #e6fcf5;
+    color: #0ca678;
+    transition: all 0.2s ease;
 }
-.btn-delete {
+.btn-edit-premium:hover {
+    background: #c3fae8;
+    transform: scale(1.05);
+}
+.btn-delete-premium {
     width: 36px;
     height: 36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:8px;
-    background:#ef9a9a;
-    color:#b71c1c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #fff0f6;
+    color: #e64980;
+    transition: all 0.2s ease;
+}
+.btn-delete-premium:hover {
+    background: #ffdeeb;
+    transform: scale(1.05);
 }
 </style>
 
@@ -170,9 +199,10 @@ document.querySelectorAll('.form-delete').forEach(form => {
             text: 'Data menu yang dihapus tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#5d4037',
-            cancelButtonColor: '#b71c1c',
-            confirmButtonText: 'Ya, hapus'
+            confirmButtonColor: '#5802f7',
+            cancelButtonColor: '#e64980',
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
         }).then(res => {
             if (res.isConfirmed) form.submit();
         });

@@ -1,42 +1,33 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Pesanan | Dalia Coffee</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .glass-effect {
-            background: rgba(255, 248, 240, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .coffee-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234e342e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-    </style>
-</head>
-
-<body class="min-h-screen bg-gradient-to-br from-[#8d6e63] via-[#a1887f] to-[#bcaaa4] coffee-pattern p-6">
-
-    <div class="max-w-3xl mx-auto glass-effect rounded-3xl shadow-2xl p-8 sm:p-12">
+@section('content')
+    <div
+        class="max-w-3xl mx-auto bg-white rounded-2xl border border-slate-100 shadow-[0_2px_20px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8">
 
         <!-- Header -->
-        <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-semibold text-[#3e2723] mb-2">Buat Pesanan</h1>
-            <p class="text-sm text-[#6d4c41]">Pilih menu dan jumlah untuk menambahkan pesanan.</p>
+        <div class="mb-8">
+            <div class="flex items-center gap-2 mb-2">
+                <a href="{{ route('orders.index') }}" class="text-slate-400 hover:text-primary transition-colors">
+                    <iconify-icon icon="solar:arrow-left-linear" width="20"></iconify-icon>
+                </a>
+                <h2 class="text-2xl font-semibold text-dark font-poppins">Buat Pesanan Baru</h2>
+            </div>
+            <p class="text-sm text-slate-400">
+                Pilih menu makanan/minuman dan masukkan jumlah pesanan kasir
+            </p>
         </div>
+
+        <!-- Error Validation -->
+        @if($errors->any())
+            <div class="mb-6 bg-rose-50 text-rose-800 border border-rose-100 px-4 py-3 rounded-xl space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <div class="flex items-center gap-2">
+                        <iconify-icon icon="solar:info-circle-linear" class="text-rose-500" width="16"></iconify-icon>
+                        <span>{{ $error }}</span>
+                    </div>
+                @endforeach
+            </div>
+        @endif
 
         <!-- Form Order -->
         <form action="{{ route('orders.store') }}" method="POST" class="space-y-6" id="order-form">
@@ -44,114 +35,104 @@
 
             <!-- Payment Method -->
             <div>
-                <label class="block text-sm font-medium text-[#4e342e] uppercase tracking-wide mb-2">
+                <label for="payment_method"
+                    class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                     Metode Pembayaran
                 </label>
-                <select name="payment_method" required
-                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
-                           focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
-                    <option value="cash">Cash</option>
-                    <option value="qris">QRIS</option>
+                <select name="payment_method" id="payment_method" required
+                    class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-dark focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all">
+                    <option value="cash">Tunai (Cash)</option>
+                    <option value="qris">QRIS (Digital)</option>
                 </select>
             </div>
 
-            <!-- Order Items -->
-            <div id="order-items" class="space-y-3">
-                <div class="order-item flex flex-col sm:flex-row gap-3 items-center">
-                    <select name="items[0][menu_id]" required
-                        class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
-                               focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
-                        @foreach($menus as $menu)
-                        <option value="{{ $menu->id }}">
-                            {{ $menu->name }} (Rp{{ number_format($menu->price) }})
-                        </option>
-                        @endforeach
-                    </select>
-
-                    <input type="number" name="items[0][quantity]" placeholder="Jumlah" min="1" required
-                        class="w-full sm:w-32 h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
-                               focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
-
-                    <button type="button" onclick="removeItem(this)"
-                        class="h-14 px-5 rounded-xl bg-red-100 text-red-600 hover:bg-red-200 transition-all flex items-center justify-center">
-                        <i data-lucide="trash-2"></i>
+            <!-- Order Items Section -->
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Daftar Item Pesanan
+                    </label>
+                    <button type="button" onclick="addItem()"
+                        class="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+                        <iconify-icon icon="solar:add-circle-linear" width="16"></iconify-icon>
+                        Tambah Item
                     </button>
+                </div>
+
+                <div id="order-items" class="space-y-3">
+                    <div
+                        class="order-item grid grid-cols-1 sm:grid-cols-[1fr_120px_48px] gap-3 items-center bg-slate-50/50 border border-slate-100 rounded-xl p-3">
+                        <select name="items[0][menu_id]" required
+                            class="h-11 px-3 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:border-primary/50">
+                            @foreach($menus as $menu)
+                                <option value="{{ $menu->id }}">
+                                    {{ $menu->name }} (Rp{{ number_format($menu->price, 0, ',', '.') }})
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <input type="number" name="items[0][quantity]" placeholder="Jumlah" min="1" required
+                            class="h-11 px-3 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:border-primary/50">
+
+                        <button type="button" onclick="removeItem(this)"
+                            class="h-11 w-11 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center hover:bg-rose-100 transition-colors">
+                            <iconify-icon icon="solar:trash-bin-trash-linear" width="18"></iconify-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Add Item Button -->
-            <button type="button" onclick="addItem()"
-                class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#efebe9] text-[#4e342e]
-                       font-semibold hover:bg-[#e0d6d1] transition-all flex items-center gap-2">
-                <i data-lucide="plus"></i>
-                Tambah Item
-            </button>
-
             <!-- Submit Button -->
             <button type="submit"
-                class="w-full bg-gradient-to-r from-[#5d4037] to-[#6d4c41] text-white font-semibold py-4 rounded-xl
-                       hover:from-[#4e342e] hover:to-[#5d4037] transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
-                Simpan Order
+                class="w-full bg-primary text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300">
+                Proses Transaksi & Simpan
             </button>
 
         </form>
 
-        <!-- Back Button -->
-        <div class="mt-6 text-center">
-            <a href="{{ route('orders.index') }}"
-                class="text-sm font-semibold text-[#5d4037] hover:text-[#4e342e] underline decoration-2 underline-offset-4">
-                Kembali ke Riwayat Transaksi
-            </a>
-        </div>
-
     </div>
 
-    <!-- Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    @push('scripts')
+        <script>
+            let itemIndex = 1;
+            const orderItemsContainer = document.getElementById('order-items');
+            const menuOptionsHtml = `@foreach($menus as $menu)<option value="{{ $menu->id }}">{{ $menu->name }} (Rp{{ number_format($menu->price, 0, ',', '.') }})</option>@endforeach`;
 
-    <!-- Script -->
-    <script>
-        let itemIndex = 1;
+            function addItem() {
+                const div = document.createElement('div');
+                div.className = 'order-item grid grid-cols-1 sm:grid-cols-[1fr_120px_48px] gap-3 items-center bg-slate-50/50 border border-slate-100 rounded-xl p-3';
+                div.innerHTML = `
+                    <select name="items[${itemIndex}][menu_id]" required
+                        class="h-11 px-3 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:border-primary/50">
+                        ${menuOptionsHtml}
+                    </select>
 
-        function addItem() {
-            const orderItems = document.getElementById('order-items');
+                    <input type="number" name="items[${itemIndex}][quantity]" placeholder="Jumlah" min="1" required
+                        class="h-11 px-3 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:border-primary/50">
 
-            const newItem = document.createElement('div');
-            newItem.className = 'order-item flex flex-col sm:flex-row gap-3 items-center';
+                    <button type="button" onclick="removeItem(this)"
+                        class="h-11 w-11 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center hover:bg-rose-100 transition-colors">
+                        <iconify-icon icon="solar:trash-bin-trash-linear" width="18"></iconify-icon>
+                    </button>
+                `;
+                orderItemsContainer.appendChild(div);
+                itemIndex++;
+            }
 
-            newItem.innerHTML = `
-                <select name="items[${itemIndex}][menu_id]" required
-                    class="w-full h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
-                           focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
-                    @foreach($menus as $menu)
-                        <option value="{{ $menu->id }}">
-                            {{ $menu->name }} (Rp{{ number_format($menu->price) }})
-                        </option>
-                    @endforeach
-                </select>
-
-                <input type="number" name="items[${itemIndex}][quantity]" placeholder="Jumlah" min="1" required
-                    class="w-full sm:w-32 h-14 px-4 rounded-xl border-2 border-[#d7ccc8] bg-white text-[#3e2723]
-                           focus:outline-none focus:border-[#6d4c41] focus:ring-4 focus:ring-[#d7ccc8] transition-all duration-300">
-
-                <button type="button" onclick="removeItem(this)"
-                    class="h-14 px-5 rounded-xl bg-red-100 text-red-600 hover:bg-red-200 transition-all flex items-center justify-center">
-                    <i data-lucide="trash-2"></i>
-                </button>
-            `;
-
-            orderItems.appendChild(newItem);
-            lucide.createIcons();
-            itemIndex++;
-        }
-
-        function removeItem(button) {
-            button.closest('.order-item').remove();
-        }
-
-        lucide.createIcons();
-    </script>
-
-</body>
-
-</html>
+            function removeItem(button) {
+                const item = button.closest('.order-item');
+                const allItems = orderItemsContainer.querySelectorAll('.order-item');
+                if (allItems.length > 1) {
+                    item.remove();
+                } else {
+                    Swal.fire({
+                        title: 'Info',
+                        text: 'Pesanan minimal harus memiliki satu menu.',
+                        icon: 'info',
+                        confirmButtonColor: '#5802f7'
+                    });
+                }
+            }
+        </script>
+    @endpush
+@endsection

@@ -2,74 +2,73 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-<div class="max-w-6xl mx-auto bg-[#fff8f0] rounded-3xl shadow-xl p-6 sm:p-8">
+<div class="bg-white rounded-2xl border border-slate-100 shadow-[0_2px_20px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8">
 
     <!-- HEADER -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <div>
-            <h2 class="text-2xl sm:text-3xl font-semibold text-[#3e2723]">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-dark font-poppins">
                 Bahan Baku
             </h2>
-            <p class="text-sm text-[#6d4c41]">
-                Kelola stok bahan baku
+            <p class="text-sm text-slate-400 mt-1">
+                Kelola data dan stok bahan baku yang digunakan untuk resep menu
             </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
+        <div class="flex flex-wrap items-center gap-3">
             <a href="{{ route('ingredients.create') }}"
-               class="inline-flex items-center gap-2
-                      bg-[#5d4037] text-white font-semibold
-                      px-5 py-3 rounded-xl hover:bg-[#4e342e] transition">
-                <i class="fas fa-plus"></i>
+               class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-200">
+                <iconify-icon icon="solar:leaf-linear" width="20"></iconify-icon>
                 Tambah Bahan Baku
             </a>
 
             <a href="{{ route('stocks.index') }}"
-               class="inline-flex items-center gap-2
-                      bg-[#8d6e63] text-white font-semibold
-                      px-5 py-3 rounded-xl hover:bg-[#6d4c41] transition">
-                <i class="fas fa-boxes-stacked"></i>
+               class="inline-flex items-center gap-2 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-semibold px-5 py-3 rounded-xl transition-all duration-200">
+                <iconify-icon icon="solar:archive-minimalistic-linear" width="20"></iconify-icon>
                 Riwayat Stok
             </a>
         </div>
     </div>
 
-    <!-- ALERT -->
+    <!-- ALERT SUCCESS -->
     @if(session('success'))
-        <div class="mb-6 rounded-xl bg-green-100 text-green-800 px-5 py-3">
-            <i class="fas fa-check-circle mr-2"></i>
-            {{ session('success') }}
+        <div class="mb-6 bg-emerald-50 text-emerald-800 border border-emerald-100 px-4 py-3 rounded-xl flex items-center gap-2">
+            <iconify-icon icon="solar:check-circle-linear" class="text-emerald-600" width="20"></iconify-icon>
+            <span>{{ session('success') }}</span>
         </div>
     @endif
 
     <!-- DESKTOP TABLE -->
-    <div class="hidden sm:block overflow-x-auto rounded-2xl border border-[#d7ccc8]">
+    <div class="hidden sm:block overflow-hidden rounded-2xl border border-slate-100">
         <table class="min-w-full text-sm">
-            <thead class="bg-[#efebe9] text-[#4e342e] uppercase text-xs">
+            <thead class="bg-slate-50/50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-400 font-semibold">
                 <tr>
-                    <th class="px-6 py-4">Nama</th>
-                    <th class="px-6 py-4 text-center w-32">Stok</th>
-                    <th class="px-6 py-4 text-center w-32">Satuan</th>
+                    <th class="px-6 py-4 text-left">Nama Bahan Baku</th>
+                    <th class="px-6 py-4 text-center w-48">Stok Tersedia</th>
+                    <th class="px-6 py-4 text-center w-48">Satuan</th>
                 </tr>
             </thead>
 
-            <tbody class="bg-white divide-y divide-[#d7ccc8]">
+            <tbody class="divide-y divide-slate-100">
                 @forelse ($ingredients as $ingredient)
-                <tr>
-                    <td class="px-6 py-4">{{ $ingredient->name }}</td>
-                    <td class="px-6 py-4 text-center font-semibold">
-                        {{ $ingredient->stock }}
+                <tr class="group hover:bg-slate-50/80 transition-colors border-b border-slate-50 last:border-0">
+                    <td class="px-6 py-4">
+                        <span class="font-semibold text-dark">{{ $ingredient->name }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-center font-bold font-mono {{ $ingredient->stock <= 5 ? 'text-rose-600' : 'text-slate-700' }}">
+                        {{ (float)$ingredient->stock }}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        {{ $ingredient->unit }}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                            {{ $ingredient->unit }}
+                        </span>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="3" class="px-6 py-6 text-center text-[#6d4c41]">
-                        Belum ada bahan baku
+                    <td colspan="3" class="px-6 py-8 text-center text-slate-400 font-medium">
+                        Belum ada data bahan baku
                     </td>
                 </tr>
                 @endforelse
@@ -80,19 +79,23 @@
     <!-- MOBILE CARD -->
     <div class="sm:hidden space-y-4">
         @forelse ($ingredients as $ingredient)
-        <div class="bg-white rounded-xl border p-4 shadow-sm">
-            <div class="font-semibold text-[#3e2723] text-lg">
-                {{ $ingredient->name }}
-            </div>
+        <div class="bg-white rounded-xl border border-slate-100 p-4 shadow-sm">
+            <div class="font-semibold text-dark text-base">{{ $ingredient->name }}</div>
 
-            <div class="mt-2 text-sm text-[#6d4c41]">
-                <div>Stok: <span class="font-semibold">{{ $ingredient->stock }}</span></div>
-                <div>Satuan: {{ $ingredient->unit }}</div>
+            <div class="mt-2 grid grid-cols-2 gap-2 text-xs border-t border-slate-50 pt-2.5">
+                <div>
+                    <span class="text-slate-400">Stok:</span>
+                    <span class="font-bold font-mono block {{ $ingredient->stock <= 5 ? 'text-rose-600' : 'text-slate-700' }}">{{ (float)$ingredient->stock }}</span>
+                </div>
+                <div>
+                    <span class="text-slate-400">Satuan:</span>
+                    <span class="font-medium text-slate-600 block">{{ $ingredient->unit }}</span>
+                </div>
             </div>
         </div>
         @empty
-        <div class="text-center text-[#6d4c41] py-6">
-            Belum ada bahan baku
+        <div class="text-center text-slate-400 py-8">
+            Belum ada data bahan baku
         </div>
         @endforelse
     </div>

@@ -29,7 +29,7 @@ class AuthController extends Controller
             if ($user->role === 'kasir') {
                 return redirect()->intended('/orders');
             } elseif ($user->role === 'owner') {
-                return redirect()->intended('/karyawan');
+                return redirect()->intended('/dashboard');
             }
 
             // Default fallback jika role tidak dikenali
