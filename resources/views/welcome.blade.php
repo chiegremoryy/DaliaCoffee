@@ -4,7 +4,28 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel 12</title>
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/dalia-coffee.png') }}">
+
+        <!-- SEO & Share Link Metadata -->
+        <title>Kedai Dalia - Dalia Coffee</title>
+        <meta name="title" content="Kedai Dalia - Dalia Coffee">
+        <meta name="description" content="Kedai Dalia (Dalia Coffee) menyajikan pilihan kopi premium dengan cita rasa terbaik, makanan lezat, dan suasana yang hangat. Lihat katalog menu kami di sini!">
+        <meta name="author" content="Kedai Dalia">
+
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="Kedai Dalia - Dalia Coffee">
+        <meta property="og:description" content="Kedai Dalia (Dalia Coffee) menyajikan pilihan kopi premium dengan cita rasa terbaik, makanan lezat, dan suasana yang hangat. Lihat katalog menu kami di sini!">
+        <meta property="og:image" content="{{ asset('images/dalia-coffee.png') }}">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:title" content="Kedai Dalia - Dalia Coffee">
+        <meta property="twitter:description" content="Kedai Dalia (Dalia Coffee) menyajikan pilihan kopi premium dengan cita rasa terbaik, makanan lezat, dan suasana yang hangat. Lihat katalog menu kami di sini!">
+        <meta property="twitter:image" content="{{ asset('images/dalia-coffee.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

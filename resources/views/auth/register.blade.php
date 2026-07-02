@@ -5,7 +5,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/dalia-coffee.png') }}">
+
+    <!-- SEO & Share Link Metadata -->
     <title>Daftar | Kedai Dalia</title>
+    <meta name="title" content="Daftar | Kedai Dalia">
+    <meta name="description" content="Daftar akun Kedai Dalia (Dalia Coffee) untuk bergabung mengelola pesanan, menu, bahan baku, dan laporan penjualan.">
+    <meta name="author" content="Kedai Dalia">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Daftar | Kedai Dalia">
+    <meta property="og:description" content="Daftar akun Kedai Dalia (Dalia Coffee) untuk bergabung mengelola pesanan, menu, bahan baku, dan laporan penjualan.">
+    <meta property="og:image" content="{{ asset('images/dalia-coffee.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="Daftar | Kedai Dalia">
+    <meta property="twitter:description" content="Daftar akun Kedai Dalia (Dalia Coffee) untuk bergabung mengelola pesanan, menu, bahan baku, dan laporan penjualan.">
+    <meta property="twitter:image" content="{{ asset('images/dalia-coffee.png') }}">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

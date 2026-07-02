@@ -76,4 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
+// Route untuk preview Halaman Maintenance
+Route::get('/maintenance', function () {
+    return view('errors.503');
+});
+
 

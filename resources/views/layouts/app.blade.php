@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ucfirst(Auth::user()->role) }} | Dalia Coffee</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/dalia-coffee.png') }}">
+
     <!-- Fonts: Montserrat (Sans) & Playfair Display (Serif) & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
