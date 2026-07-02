@@ -20,6 +20,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role', // Misalnya: 'admin', 'kasir', 'dapur'
+        'profile_photo',
     ];
 
     /**

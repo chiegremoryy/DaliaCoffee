@@ -8,6 +8,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [MenuController::class, 'katalog'])->name('home');
 
@@ -28,6 +29,7 @@ Route::prefix('menu')->name('menu.')->middleware('auth', 'role:owner')->group(fu
 });
 
 // Route Dashboard
+Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard')->middleware('auth', 'role:owner');
 Route::get('/karyawan', [AdminDashboardController::class, 'index'])->name('karyawan.index')->middleware('auth', 'role:owner');
 Route::get('/karyawan/create', [AdminDashboardController::class, 'create'])->name('karyawan.create')->middleware('auth', 'role:owner');
 Route::post('/karyawan', [AdminDashboardController::class, 'store'])->name('karyawan.store')->middleware('auth', 'role:owner');
@@ -61,8 +63,14 @@ Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])-
 // Route Order
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create')->middleware('auth', 'role:kasir');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('auth', 'role:kasir');
-Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show')->middleware('auth', 'role:kasir');
-Route::get('/orders/print/{order}', [OrderController::class, 'print'])->name('orders.print')->middleware('auth', 'role:kasir');
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show')->middleware('auth', 'role:kasir,owner');
+Route::get('/orders/print/{order}', [OrderController::class, 'print'])->name('orders.print')->middleware('auth', 'role:kasir,owner');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware('auth', 'role:kasir');
+
+// Route Profile (bisa diakses owner maupun kasir)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 
